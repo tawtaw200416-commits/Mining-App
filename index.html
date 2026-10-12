@@ -8,6 +8,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Telegram Web App SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         @keyframes pulse-glow {
             0%, 100% { opacity: 0.6; }
@@ -39,7 +41,7 @@
             <div class="flex justify-between items-center">
                 <div>
                     <p class="text-slate-400 text-xs font-medium uppercase">လက်ရှိလက်ကျန်</p>
-                    <h3 class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-emerald-400 mt-0.5">$ 0.00</h3>
+                    <h3 id="user-balance" class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-emerald-400 mt-0.5">$ 0.00</h3>
                 </div>
                 <button onclick="topUpBalance()" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white px-4 py-2 rounded-xl text-sm font-semibold shadow-lg shadow-emerald-900/30 transition-all active:scale-95">
                     + ငွေဖြည့်မည်
@@ -73,25 +75,53 @@
 
     <!-- Footer Action Area -->
     <div class="p-4 bg-slate-900/80 backdrop-blur-lg border-t border-slate-800 text-center">
-        <p class="text-xs text-slate-500">Secure payments powered by Telegram WebApp</p>
+        <p class="text-xs text-slate-500">Secure payments powered by Telegram & Supabase</p>
     </div>
 
-    <!-- JavaScript Integration -->
+    <!-- JavaScript Integration with Supabase -->
     <script>
         // Initialize Telegram Web App
         let tg = window.Telegram.WebApp;
-        tg.expand(); // Screen ကို အပြည့်ချဲ့မည်
+        tg.expand();
 
-        // Selected Package State
+        // Supabase Configuration (သင့်ရဲ့ Supabase Project က URL နဲ့ Anon Key ကို ထည့်ပါ)
+        const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+        const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+        
+        const { createClient } = supabase;
+        const _supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Telegram User ID ရယူရန် (Test လုပ်တဲ့အခါ Default ID တစ်ခုသုံးလို့ရပါတယ်)
+        let telegramUser = tg.initDataUnsafe?.user || { id: 123456789, first_name: "TestUser" };
+
         let selectedPlan = { name: "Starter", price: 5 };
+
+        // App စဖွင့်ချင်း Supabase ထဲမှာ User ရှိမရှိ စစ်ဆေးပြီး Data ယူမည်
+        async function fetchUserData() {
+            let { data, error } = await _supabase
+                .from('users')
+                .select('*')
+                .eq('telegram_id', telegramUser.id)
+                .single();
+
+            if (data) {
+                document.getElementById('user-balance').innerText = `$ ${data.balance.toFixed(2)}`;
+            } else {
+                // User အသစ်ဆိုရင် Supabase ထဲသို့ အလိုအလျောက် ထည့်မည်
+                await _supabase.from('users').insert([
+                    { telegram_id: telegramUser.id, username: telegramUser.first_name, balance: 0.00 }
+                ]);
+            }
+        }
+
+        fetchUserData();
 
         function selectPackage(name, price) {
             selectedPlan = { name, price };
-            tg.HapticFeedback.selectionChanged(); // ထိလိုက်ရင် ဖုန်းတုန်ခါမှုပေးမည်
+            tg.HapticFeedback.selectionChanged();
             
-            // Telegram Main Button ကို ပေါ်လာစေရန်နှင့် စာသားပြောင်းရန်
             tg.MainButton.text = `${name} ဝယ်ယူရန် ($${price})`;
-            tg.MainButton.color = "#8b5cf6"; // Purple color
+            tg.MainButton.color = "#8b5cf6";
             tg.MainButton.textColor = "#ffffff";
             tg.MainButton.show();
         }
@@ -100,10 +130,18 @@
             tg.showAlert("ငွေဖြည့်သွင်းရန် Bot ထံသို့ လမ်းညွှန်ပေးပါမည်။");
         }
 
-        // Telegram Main Button ကို နှိပ်လိုက်သည့်အခါ လုပ်ဆောင်မည့် အပိုင်း
-        Telegram.WebApp.onEvent('mainButtonClicked', function() {
-            tg.sendData(JSON.stringify(selectedPlan)); // Bot ထံသို့ Data ပို့မည်
-            tg.showAlert(`အောင်မြင်ပါသည်။ ${selectedPlan.name} ($${selectedPlan.price}) ကို ဝယ်ယူပြီးပါပြီ။`);
+        Telegram.WebApp.onEvent('mainButtonClicked', async function() {
+            // ဝယ်ယူမှုမှတ်တမ်းကို Supabase ရဲ့ purchases table ထဲသို့ သိမ်းမည်
+            const { error } = await _supabase.from('purchases').insert([
+                { telegram_id: telegramUser.id, package_name: selectedPlan.name, price: selectedPlan.price }
+            ]);
+
+            if (!error) {
+                tg.sendData(JSON.stringify(selectedPlan));
+                tg.showAlert(`အောင်မြင်ပါသည်။ ${selectedPlan.name} ($${selectedPlan.price}) ကို ဝယ်ယူပြီးပါပြီ။`);
+            } else {
+                tg.showAlert("ဝယ်ယူမှု အဆင်မပြေပါ။ ထပ်မံကြိုးစားပါ။");
+            }
         });
     </script>
 </body>
