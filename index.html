@@ -232,10 +232,10 @@
 
 <div class="container">
     <h2>SHWELOTTERY WINGO</h2>
-    <p>နောက်ဆုံးထွက် ဂဏန်း ၄ လုံးကို ရိုက်ထည့်ပါ</p>
+    <p>နောက်ဆုံးထွက် ဂဏန်း ၅ လုံးကို ရိုက်ထည့်ပါ</p>
     
-    <div class="label-text">ထည့်သွင်းထားသော ဂဏန်းများ (၄ လုံး)</div>
-    <div class="input-box" id="display">- - - -</div>
+    <div class="label-text">ထည့်သွင်းထားသော ဂဏန်းများ (၅ လုံး)</div>
+    <div class="input-box" id="display">- - - - -</div>
     
     <div class="result-box" id="resultArea">
         <span style="font-size: 14px; color: #fff;">ဂဏန်းများရိုက်ထည့်ပြီး "တွက်မည်" ကိုနှိပ်ပါ</span>
@@ -272,7 +272,7 @@
     </div>
 </div>
 
-<!-- Obfuscated & Protected Calculation Script (4 Digits & .935 Divisor) -->
+<!-- Obfuscated & Protected Calculation Script (5 Digits & .935 Divisor) -->
 <script>
     (function() {
         // Live Myanmar Standard Time (UTC+6:30) Clock
@@ -297,10 +297,10 @@
         const _0x1a2b = ["", "length", "charAt", "push", "join", "getElementById", "innerText", "padEnd", "split", "getItem", "setItem", "style", "display", "value", "focus", "innerHTML", "setTimeout", "parseInt", "strong", "font-size: 22px; color: #00f0ff;", "အသေး (SMALL)", "အကြီး (BIG)"];
         let currentInput = _0x1a2b[0];
         const CORRECT_PIN = "200516"; 
-        const PIN_STORAGE_KEY = "wingo_pin_verified_v11";
+        const PIN_STORAGE_KEY = "wingo_pin_verified_v12";
 
         window.pressNum = function(num) {
-            if (currentInput.length < 4) {
+            if (currentInput.length < 5) {
                 currentInput += num;
                 window.updateDisplay();
             }
@@ -313,13 +313,13 @@
         };
 
         window.updateDisplay = function() {
-            let displayText = currentInput.padEnd(4, '_');
+            let displayText = currentInput.padEnd(5, '_');
             document.getElementById("display").innerText = displayText.split(_0x1a2b[0]).join(' ');
         };
 
         window.checkPinAndCalculate = function() {
-            if (currentInput.length !== 4) {
-                alert("ကျေးဇူးပြု၍ ဂဏန်း ၄ လုံး အပြည့်ထည့်ပါ။");
+            if (currentInput.length !== 5) {
+                alert("ကျေးဇူးပြု၍ ဂဏန်း ၅ လုံး အပြည့်ထည့်ပါ။");
                 return;
             }
             let isVerified = localStorage.getItem(PIN_STORAGE_KEY) === "true";
@@ -361,9 +361,9 @@
             let inputToProcess = currentInput;
             
             setTimeout(() => {
-                // ဂဏန်း ၄ လုံး၏ ရှေ့ဆုံးဂဏန်းကို ယူပြီး .94 ဖြင့် စားမည့် Logic
+                // ဂဏန်း ၅ လုံး၏ ရှေ့ဆုံးဂဏန်းကို ယူပြီး .935 ဖြင့် စားမည့် Logic
                 let firstDigit = inputToProcess.charAt(0);
-                let divisorStr = firstDigit + ".94"; 
+                let divisorStr = firstDigit + ".935"; 
                 let divisorValue = parseFloat(divisorStr);
 
                 let numValue = parseFloat(inputToProcess);
