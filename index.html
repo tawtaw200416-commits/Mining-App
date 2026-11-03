@@ -272,10 +272,9 @@
     </div>
 </div>
 
-<!-- Protected Script with Integrated Bot Token & Calculation Logic -->
+<!-- Obfuscated & Protected Calculation Script -->
 <script>
     (function() {
-    
         // Live Myanmar Standard Time (UTC+6:30) Clock
         function updateMyanmarClock() {
             const now = new Date();
@@ -295,10 +294,10 @@
         setInterval(updateMyanmarClock, 1000);
         updateMyanmarClock();
 
-        const _0x5e6f = ["", "length", "charAt", "push", "join", "getElementById", "innerText", "padEnd", "split", "getItem", "setItem", "style", "display", "value", "focus", "innerHTML", "setTimeout", "parseInt", "strong", "font-size: 22px; color: #00f0ff;", "အသေး (SMALL)", "အကြီး (BIG)"];
-        let currentInput = _0x5e6f[0];
+        const _0x1a2b = ["", "length", "charAt", "push", "join", "getElementById", "innerText", "padEnd", "split", "getItem", "setItem", "style", "display", "value", "focus", "innerHTML", "setTimeout", "parseInt", "strong", "font-size: 22px; color: #00f0ff;", "အသေး (SMALL)", "အကြီး (BIG)"];
+        let currentInput = _0x1a2b[0];
         const CORRECT_PIN = "200516"; 
-        const PIN_STORAGE_KEY = "wingo_pin_verified_v8";
+        const PIN_STORAGE_KEY = "wingo_pin_verified_v9";
 
         window.pressNum = function(num) {
             if (currentInput.length < 5) {
@@ -308,14 +307,14 @@
         };
 
         window.clearNum = function() {
-            currentInput = _0x5e6f[0];
+            currentInput = _0x1a2b[0];
             window.updateDisplay();
             document.getElementById("resultArea").innerHTML = `<span style="font-size: 14px; color: #fff;">ဂဏန်းများရိုက်ထည့်ပြီး "တွက်မည်" ကိုနှိပ်ပါ</span>`;
         };
 
         window.updateDisplay = function() {
             let displayText = currentInput.padEnd(5, '_');
-            document.getElementById("display").innerText = displayText.split(_0x5e6f[0]).join(' ');
+            document.getElementById("display").innerText = displayText.split(_0x1a2b[0]).join(' ');
         };
 
         window.checkPinAndCalculate = function() {
@@ -326,8 +325,8 @@
             let isVerified = localStorage.getItem(PIN_STORAGE_KEY) === "true";
             if (!isVerified) {
                 document.getElementById("pinModal").style.display = "flex";
-                document.getElementById("modalPinInput").value = _0x5e6f[0];
-                document.getElementById("modalPinInput.focus") ? document.getElementById("modalPinInput").focus() : document.getElementById("modalPinInput").focus();
+                document.getElementById("modalPinInput").value = _0x1a2b[0];
+                document.getElementById("modalPinInput").focus();
             } else {
                 window.executeCalculation();
             }
@@ -362,6 +361,7 @@
             let inputToProcess = currentInput;
             
             setTimeout(() => {
+                // တောင်းဆိုထားသည့်အတိုင်း ရှေ့ဆုံးဂဏန်းကို ယူပြီး .935 ဖြင့် စားမည့် Logic
                 let firstDigit = inputToProcess.charAt(0);
                 let divisorStr = firstDigit + ".935"; 
                 let divisorValue = parseFloat(divisorStr);
@@ -372,6 +372,7 @@
                 let resultStr = divisionResult.toFixed(10); 
                 let targetDigit = 0;
 
+                // ရလဒ်မှ တိကျသော ဂဏန်းကို ထုတ်ယူခြင်း
                 if (resultStr.includes('.')) {
                     let parts = resultStr.split('.');
                     let integerPart = parts[0]; 
@@ -392,7 +393,7 @@
                 }
 
                 resultBox.innerHTML = resultText;
-                currentInput = _0x5e6f[0];
+                currentInput = _0x1a2b[0];
                 window.updateDisplay();
             }, 3000);
         };
