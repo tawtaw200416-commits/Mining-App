@@ -1,1 +1,404 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHWELOTTERY WINGO</title>
+    <style>
+        body {
+            background-color: #0b0f19;
+            color: #fff;
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            position: relative;
+        }
+        /* Top-Right Corner Container for Group Button and Clock */
+        .top-right-bar {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        /* BIGO Group Button Style (Blue Theme) */
+        .group-btn {
+            background-color: #0e1626;
+            border: 1px solid #00f0ff;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #00f0ff;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+            transition: 0.2s;
+        }
+        .group-btn:hover {
+            background-color: #00f0ff;
+            color: #0b0f19;
+        }
+        /* Myanmar Standard Time Clock (Blue Theme) */
+        .live-clock {
+            background-color: #0e1626;
+            border: 1px solid #00f0ff;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #00f0ff;
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+            letter-spacing: 1px;
+        }
+        .container {
+            background-color: #0e1626;
+            border: 2px solid #00f0ff;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+            padding: 20px;
+            border-radius: 15px;
+            width: 320px;
+            text-align: center;
+            margin-top: 30px;
+        }
+        h2 {
+            color: #00f0ff;
+            margin-bottom: 5px;
+            font-size: 20px;
+        }
+        p {
+            color: #8abcf8;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+        .label-text {
+            color: #8abcf8;
+            font-size: 12px;
+            margin-bottom: 5px;
+            text-align: left;
+        }
+        .input-box {
+            background-color: #070a12;
+            border: 1px solid #00f0ff;
+            padding: 12px;
+            margin-bottom: 15px;
+            font-size: 20px;
+            letter-spacing: 5px;
+            color: #00f0ff;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: inset 0 0 5px rgba(0, 240, 255, 0.2);
+        }
+        .result-box {
+            background-color: #12223d;
+            border: 1px solid #00f0ff;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            min-height: 55px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .keypad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+        .key {
+            background-color: #172a45;
+            color: #fff;
+            border: 1px solid #00f0ff;
+            padding: 15px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 0 5px rgba(0, 240, 255, 0.1);
+        }
+        .key:active {
+            background-color: #00f0ff;
+            color: #000;
+        }
+        .btn-calculate {
+            background: linear-gradient(to right, #0072ff, #00f0ff);
+            color: white;
+            border: 1px solid #00f0ff;
+        }
+        .btn-clear {
+            background-color: #3d1212;
+            border: 1px solid #ff4d4d;
+            color: #ff4d4d;
+        }
+        .footer-text {
+            margin-top: 15px;
+            font-size: 11px;
+            color: #8abcf8;
+        }
+        .admin-btn {
+            display: inline-block;
+            background-color: #00f0ff;
+            color: #0b0f19;
+            padding: 8px 12px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 13px;
+            margin-top: 8px;
+        }
+        /* Custom PIN Modal Styling */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(11, 15, 25, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            display: none;
+        }
+        .modal-content {
+            background-color: #0e1626;
+            border: 2px solid #00f0ff;
+            padding: 20px;
+            border-radius: 12px;
+            width: 280px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+        }
+        .modal-input {
+            background-color: #070a12;
+            border: 1px solid #00f0ff;
+            color: #00f0ff;
+            padding: 10px;
+            font-size: 18px;
+            width: 80%;
+            text-align: center;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            letter-spacing: 3px;
+        }
+        .modal-btn-group {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        .modal-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .modal-btn-submit {
+            background-color: #00f0ff;
+            color: #0b0f19;
+        }
+        .modal-btn-cancel {
+            background-color: #3d1212;
+            color: #ff4d4d;
+            border: 1px solid #ff4d4d;
+        }
+        /* Loading Animation */
+        .spinner {
+            border: 3px solid rgba(0, 240, 255, 0.2);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border-left-color: #00f0ff;
+            animation: spin 1s linear infinite;
+            margin-bottom: 5px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
 
+<!-- Top Right Bar: BIGO Group Button & Myanmar Standard Time Clock -->
+<div class="top-right-bar">
+    <a href="https://t.me/+6iY7D2rwWxAyZTZl" target="_blank" class="group-btn">BIGO Group</a>
+    <div class="live-clock" id="mmClock">မြန်မာစံတော်ချိန်: --:--:--</div>
+</div>
+
+<div class="container">
+    <h2>SHWELOTTERY WINGO</h2>
+    <p>နောက်ဆုံးထွက် ဂဏန်း ၄ လုံးကို ရိုက်ထည့်ပါ</p>
+    
+    <div class="label-text">ထည့်သွင်းထားသော ဂဏန်းများ (၄ လုံး)</div>
+    <div class="input-box" id="display">- - - -</div>
+    
+    <div class="result-box" id="resultArea">
+        <span style="font-size: 14px; color: #fff;">ဂဏန်းများရိုက်ထည့်ပြီး "တွက်မည်" ကိုနှိပ်ပါ</span>
+    </div>
+
+    <div class="keypad">
+        <button class="key" onclick="pressNum('1')">1</button>
+        <button class="key" onclick="pressNum('2')">2</button>
+        <button class="key" onclick="pressNum('3')">3</button>
+        <button class="key" onclick="pressNum('4')">4</button>
+        <button class="key" onclick="pressNum('5')">5</button>
+        <button class="key" onclick="pressNum('6')">6</button>
+        <button class="key" onclick="pressNum('7')">7</button>
+        <button class="key" onclick="pressNum('8')">8</button>
+        <button class="key" onclick="pressNum('9')">9</button>
+        <button class="key btn-clear" onclick="clearNum()">ဖျက်ရန်</button>
+        <button class="key" onclick="pressNum('0')">0</button>
+        <button class="key btn-calculate" onclick="checkPinAndCalculate()">တွက်မည်</button>
+    </div>
+    
+    <div class="footer-text">SHWELOTTERY WINGO © 2026 | ALL RIGHTS RESERVED</div>
+</div>
+
+<!-- Custom PIN Modal -->
+<div class="modal-overlay" id="pinModal">
+    <div class="modal-content">
+        <h3 style="color: #00f0ff; margin-top: 0; font-size: 16px;">🔐 PIN နံပါတ် လိုအပ်သည်</h3>
+        <p style="font-size: 12px; color: #8abcf8; margin-bottom: 10px;">ကျေးဇူးပြု၍ PIN နံပါတ်ကို ထည့်ပါ</p>
+        <input type="password" id="modalPinInput" class="modal-input" maxlength="10" placeholder="••••••">
+        <div class="modal-btn-group">
+            <button class="modal-btn modal-btn-cancel" onclick="closePinModal()">ပိတ်ရန်</button>
+            <button class="modal-btn modal-btn-submit" onclick="submitPin()">အတည်ပြု</button>
+        </div>
+    </div>
+</div>
+
+<!-- Obfuscated & Protected Calculation Script (4 Digits & .935 Divisor) -->
+<script>
+    (function() {
+        // Live Myanmar Standard Time (UTC+6:30) Clock
+        function updateMyanmarClock() {
+            const now = new Date();
+            const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+            const mmTime = new Date(utc + (3600000 * 6.5));
+            
+            let hours = mmTime.getHours();
+            let minutes = mmTime.getMinutes();
+            let seconds = mmTime.getSeconds();
+            
+            hours = hours < 10 ? '0' + hours : hours;
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+            
+            document.getElementById("mmClock").innerText = `မြန်မာစံတော်ချိန်: ${hours}:${minutes}:${seconds}`;
+        }
+        setInterval(updateMyanmarClock, 1000);
+        updateMyanmarClock();
+
+        const _0x1a2b = ["", "length", "charAt", "push", "join", "getElementById", "innerText", "padEnd", "split", "getItem", "setItem", "style", "display", "value", "focus", "innerHTML", "setTimeout", "parseInt", "strong", "font-size: 22px; color: #00f0ff;", "အသေး (SMALL)", "အကြီး (BIG)"];
+        let currentInput = _0x1a2b[0];
+        const CORRECT_PIN = "200516"; 
+        const PIN_STORAGE_KEY = "wingo_pin_verified_v10";
+
+        window.pressNum = function(num) {
+            if (currentInput.length < 4) {
+                currentInput += num;
+                window.updateDisplay();
+            }
+        };
+
+        window.clearNum = function() {
+            currentInput = _0x1a2b[0];
+            window.updateDisplay();
+            document.getElementById("resultArea").innerHTML = `<span style="font-size: 14px; color: #fff;">ဂဏန်းများရိုက်ထည့်ပြီး "တွက်မည်" ကိုနှိပ်ပါ</span>`;
+        };
+
+        window.updateDisplay = function() {
+            let displayText = currentInput.padEnd(4, '_');
+            document.getElementById("display").innerText = displayText.split(_0x1a2b[0]).join(' ');
+        };
+
+        window.checkPinAndCalculate = function() {
+            if (currentInput.length !== 4) {
+                alert("ကျေးဇူးပြု၍ ဂဏန်း ၄ လုံး အပြည့်ထည့်ပါ။");
+                return;
+            }
+            let isVerified = localStorage.getItem(PIN_STORAGE_KEY) === "true";
+            if (!isVerified) {
+                document.getElementById("pinModal").style.display = "flex";
+                document.getElementById("modalPinInput").value = _0x1a2b[0];
+                document.getElementById("modalPinInput").focus();
+            } else {
+                window.executeCalculation();
+            }
+        };
+
+        window.closePinModal = function() {
+            document.getElementById("pinModal").style.display = "none";
+        };
+
+        window.submitPin = function() {
+            let userPin = document.getElementById("modalPinInput").value;
+            let resultBox = document.getElementById("resultArea");
+            if (userPin === CORRECT_PIN) {
+                localStorage.setItem(PIN_STORAGE_KEY, "true");
+                window.closePinModal();
+                window.executeCalculation();
+            } else {
+                window.closePinModal();
+                resultBox.innerHTML = `
+                    <span style="font-size: 13px; color: #ff4d4d; text-align: center;">⚠️ PIN နံပါတ် မှားယွင်းနေပါသည်</span>
+                    <a href="https://t.me/skybilly20" target="_blank" class="admin-btn" style="background-color: #00f0ff; color: #0b0f19;">Admin ကို ဆက်သွယ်ရန် (@skybilly20)</a>
+                `;
+            }
+        };
+
+        window.executeCalculation = function() {
+            let resultBox = document.getElementById("resultArea");
+            resultBox.innerHTML = `
+                <div class="spinner"></div>
+                <span style="font-size: 12px; color: #00f0ff;">⚡ Server မှ Data တွက်ချက်နေပါသည်... (3s)</span>
+            `;
+            let inputToProcess = currentInput;
+            
+            setTimeout(() => {
+                // ဂဏန်း ၄ လုံး၏ ရှေ့ဆုံးဂဏန်းကို ယူပြီး .94 ဖြင့် စားမည့် Logic
+                let firstDigit = inputToProcess.charAt(0);
+                let divisorStr = firstDigit + ".94"; 
+                let divisorValue = parseFloat(divisorStr);
+
+                let numValue = parseFloat(inputToProcess);
+                let divisionResult = numValue / divisorValue; 
+                
+                let resultStr = divisionResult.toFixed(10); 
+                let targetDigit = 0;
+
+                // ရလဒ်မှ တိကျသော ဂဏန်းကို ထုတ်ယူခြင်း
+                if (resultStr.includes('.')) {
+                    let parts = resultStr.split('.');
+                    let integerPart = parts[0]; 
+                    if (integerPart && integerPart.length > 0) {
+                        targetDigit = parseInt(integerPart.charAt(integerPart.length - 1), 10);
+                    }
+                } else {
+                    let cleanStr = resultStr.replace(/,/g, '');
+                    targetDigit = parseInt(cleanStr.charAt(cleanStr.length - 1), 10);
+                }
+
+                let isBig = targetDigit >= 5;
+                let resultText = "";
+                if (isBig) {
+                    resultText = `<strong style="font-size: 22px; color: #00f0ff;">အကြီး (BIG)</strong> <span style="font-size: 14px; color: #8abcf8; margin-top: 4px;">(ကျလာနိုင်မည့်ဂဏန်း: ${targetDigit})</span>`;
+                } else {
+                    resultText = `<strong style="font-size: 22px; color: #00f0ff;">အသေး (SMALL)</strong> <span style="font-size: 14px; color: #8abcf8; margin-top: 4px;">(ကျလာနိုင်မည့်ဂဏန်း: ${targetDigit})</span>`;
+                }
+
+                resultBox.innerHTML = resultText;
+                currentInput = _0x1a2b[0];
+                window.updateDisplay();
+            }, 3000);
+        };
+    })();
+</script>
+
+</body>
+</html>
