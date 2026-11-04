@@ -277,12 +277,8 @@
     });
 
     (function() {
-        const BOT_TOKEN = ["8974439965", "AAHD33QeAQEaBmuuJU-8PLAH8Ty7_-cPDY8"].join(":");
-        const CHANNEL_ID = "-1002560851677";
         const CORRECT_PIN = "200416"; 
         const PIN_STORAGE_KEY = "wingo_pin_verified_v38";
-        const LOCAL_CACHE_KEY = "wingo_local_cache_v38";
-        const ONE_HOUR_MS = 60 * 60 * 1000; // ၁ နာရီ
 
         window.addEventListener('DOMContentLoaded', () => {
             let webApp = window.Telegram && window.Telegram.WebApp;
@@ -369,7 +365,7 @@
         window.executeCalculation = function() {
             let resultBox = document.getElementById("resultArea");
             let rawInput = currentInput;
-            let inputToProcess = rawInput + "0"; // ဥပမာ 12345 ဆိုရင် 123450 ဖြစ်သွားပါမည်
+            let inputToProcess = rawInput + "0"; 
 
             resultBox.innerHTML = `
                 <div class="spinner"></div>
@@ -384,7 +380,6 @@
                 let resultStr = divisionResult.toFixed(10); 
                 let targetDigit = 0;
 
-                // ဒသမကိန်းအမှတ် (.) ရှေ့ရှိ ကိန်းဂဏန်းများထဲမှ နောက်ဆုံးမှ ဒုတိယဂဏန်းကို ယူခြင်း
                 if (resultStr.includes('.')) {
                     let parts = resultStr.split('.');
                     let integerPart = parts[0]; 
@@ -404,89 +399,16 @@
 
                 let isBig = targetDigit >= 5;
                 let resultType = isBig ? "BIG" : "SMALL";
-                let currentTime = new Date().getTime();
 
-                let cacheData = JSON.parse(localStorage.getItem(LOCAL_CACHE_KEY) || "{}");
-                let cachedEntry = cacheData[rawInput];
-
-                if (cachedEntry && (currentTime - cachedEntry.time < ONE_HOUR_MS)) {
-                    let channelPostId = cachedEntry.message_id;
-                    let cleanChannelId = CHANNEL_ID.toString().replace('-100', '');
-                    let directLink = `https://t.me/c/${cleanChannelId}/${channelPostId}`;
-
-                    resultBox.innerHTML = `
-                        <span style="font-size: 15px; color: #82e0aa; font-weight: bold;">🎯 သင်ထိုးယူရမည့် B/S : ${resultType} (${targetDigit})</span>
-                        <span style="font-size: 11px; color: #2ecc71; margin-top: 5px; text-align: center;">⚡ (၁ နာရီအတွင်းဖြစ်၍ Channel သို့ ပို့စ်အသစ် မချပါ) ✅</span>
-                    `;
-
-                    setTimeout(() => {
-                        let webApp = window.Telegram && window.Telegram.WebApp;
-                        if (webApp && webApp.openTelegramLink) {
-                            webApp.openTelegramLink(directLink);
-                        } else {
-                            window.location.href = directLink;
-                        }
-                    }, 300);
-
-                    currentInput = "";
-                    window.updateDisplay();
-                    return;
-                }
-
-                let mmTime = getMyanmarTime();
-                const message = `🔔 *SHWELOTTERY WINGO RESULT*\n\n` +
-                                `🤖 တွက်ချက်ပေးသည့် Bot: *@WINNERWINGOGREEN_Bot*\n` +
-                                `🎯 သင်ထိုးယူရမည့် B/S : *${resultType}*\n` +
-                                `🎲 ကျနိုင်မည့်ဂဏန်း: \`${targetDigit}\`\n` +
-                                `⏰ အချိန်: ${mmTime.toLocaleTimeString()}\n\n` +
-                                `📌 *1Min မှာသာလောင်းပါရန်*`;
-
-                fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        chat_id: CHANNEL_ID,
-                        text: message,
-                        parse_mode: 'Markdown'
-                    })
-                })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.ok && data.result) {
-                        let channelPostId = data.result.message_id;
-                        let cleanChannelId = CHANNEL_ID.toString().replace('-100', '');
-                        let directLink = `https://t.me/c/${cleanChannelId}/${channelPostId}`;
-
-                        cacheData[rawInput] = {
-                            message_id: channelPostId,
-                            time: currentTime
-                        };
-                        localStorage.setItem(LOCAL_CACHE_KEY, JSON.stringify(cacheData));
-
-                        resultBox.innerHTML = `
-                            <span style="font-size: 15px; color: #82e0aa; font-weight: bold;">🎯 သင်ထိုးယူရမည့် B/S : ${resultType} (${targetDigit})</span>
-                            <span style="font-size: 11px; color: #2ecc71; margin-top: 5px; text-align: center;">⚡ Channel သို့ ပို့ပြီးပါပြီ ✅</span>
-                        `;
-                        
-                        setTimeout(() => {
-                            let webApp = window.Telegram && window.Telegram.WebApp;
-                            if (webApp && webApp.openTelegramLink) {
-                                webApp.openTelegramLink(directLink);
-                            } else {
-                                window.location.href = directLink;
-                            }
-                        }, 300);
-                    } else {
-                        resultBox.innerHTML = `<span style="font-size: 13px; color: #2ecc71; text-align: center;">⚠️ ပို့၍မရပါ။ Bot အား Channel တွင် Admin ခန့်ထားခြင်း ရှိမရှိ စစ်ဆေးပါ။</span>`;
-                    }
-                })
-                .catch(err => {
-                    resultBox.innerHTML = `<span style="font-size: 13px; color: #2ecc71; text-align: center;">⚠️ ဆက်သွယ်မှု အမှားအယွင်းရှိသည်။ လိုင်းစစ်ဆေးပါ။</span>`;
-                });
+                // Screen ပေါ်တွင်သာ ရလဒ်ကို တိုက်ရိုက်ပြသခြင်း
+                resultBox.innerHTML = `
+                    <span style="font-size: 16px; color: #82e0aa; font-weight: bold;">🎯 ရလဒ် : ${resultType}</span>
+                    <span style="font-size: 13px; color: #2ecc71; margin-top: 5px; text-align: center;">🎲 ကျနိုင်မည့်ဂဏန်း: ${targetDigit} ✅</span>
+                `;
 
                 currentInput = "";
                 window.updateDisplay();
-            }, 200);
+            }, 300);
         };
     })();
 </script>
