@@ -185,4 +185,222 @@
             justify-content: space-between;
             gap: 10px;
         }
-        
+        .modal-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .modal-btn-submit {
+            background-color: #2ecc71;
+            color: #0b190f;
+        }
+        .modal-btn-cancel {
+            background-color: #123d1d;
+            color: #2ecc71;
+            border: 1px solid #2ecc71;
+        }
+        .spinner {
+            border: 3px solid rgba(46, 204, 113, 0.2);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border-left-color: #2ecc71;
+            animation: spin 1s linear infinite;
+            margin-bottom: 5px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+
+<div class="top-right-bar">
+    <a href="https://t.me/+6iY7D2rwWxAyZTZl" target="_blank" class="group-btn">BIGO Group</a>
+    <div class="live-clock" id="mmClock">မြန်မာစံတော်ချိန်: --:--:--</div>
+</div>
+
+<div class="container" id="appContainer">
+    <h2>SHWELOTTERY WINGO</h2>
+    <p>နောက်ဆုံးထွက် ဂဏန်း ၅ လုံးကို ရိုက်ထည့်ပါ</p>
+    
+    <div class="label-text">ထည့်သွင်းထားသော ဂဏန်းများ (၅ လုံး)</div>
+    <div class="input-box" id="display">- - - - -</div>
+    
+    <div class="result-box" id="resultArea">
+        <span style="font-size: 14px; color: #fff;">ဂဏန်းများရိုက်ထည့်ပြီး "တွက်မည်" ကိုနှိပ်ပါ</span>
+    </div>
+
+    <div class="keypad">
+        <button class="key" onclick="pressNum('1')">1</button>
+        <button class="key" onclick="pressNum('2')">2</button>
+        <button class="key" onclick="pressNum('3')">3</button>
+        <button class="key" onclick="pressNum('4')">4</button>
+        <button class="key" onclick="pressNum('5')">5</button>
+        <button class="key" onclick="pressNum('6')">6</button>
+        <button class="key" onclick="pressNum('7')">7</button>
+        <button class="key" onclick="pressNum('8')">8</button>
+        <button class="key" onclick="pressNum('9')">9</button>
+        <button class="key btn-clear" onclick="clearNum()">ဖျက်ရန်</button>
+        <button class="key" onclick="pressNum('0')">0</button>
+        <button class="key btn-calculate" onclick="checkPinAndCalculate()">တွက်မည်</button>
+    </div>
+
+    <div class="footer-text">SHWELOTTERY WINGO © 2026 | ALL RIGHTS RESERVED</div>
+</div>
+
+<div class="modal-overlay" id="pinModal">
+    <div class="modal-content">
+        <h3 style="color: #2ecc71; margin-top: 0; font-size: 16px;">🔐 PIN နံပါတ် လိုအပ်သည်</h3>
+        <p style="font-size: 12px; color: #82e0aa; margin-bottom: 10px;">ကျေးဇူးပြု၍ PIN နံပါတ်ကို ထည့်ပါ</p>
+        <input type="password" id="modalPinInput" class="modal-input" maxlength="10" placeholder="••••••">
+        <div class="modal-btn-group">
+            <button class="modal-btn modal-btn-cancel" onclick="closePinModal()">ပိတ်ရန်</button>
+            <button class="modal-btn modal-btn-submit" onclick="submitPin()">အတည်ပြု</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ဖျက်ရန်ကီးနှင့် F12 ကာကွယ်ရေး
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || (e.ctrlKey && e.key === 'U')) {
+            e.preventDefault();
+            alert("⚠️ ဤစနစ်တွင် ကုဒ်ခိုးယူခွင့် မပြုပါ။");
+            return false;
+        }
+    });
+
+    (function() {
+        const CORRECT_PIN = "200416"; 
+        const PIN_STORAGE_KEY = "wingo_pin_verified_v39";
+
+        // မြန်မာစံတော်ချိန်နာရီ
+        function updateMyanmarClock() {
+            const now = new Date();
+            const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+            const mmTime = new Date(utc + (3600000 * 6.5));
+            let hours = mmTime.getHours();
+            let minutes = mmTime.getMinutes();
+            let seconds = mmTime.getSeconds();
+            hours = hours < 10 ? '0' + hours : hours;
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+            document.getElementById("mmClock").innerText = `မြန်မာစံတော်ချိန်: ${hours}:${minutes}:${seconds}`;
+        }
+        setInterval(updateMyanmarClock, 1000);
+        updateMyanmarClock();
+
+        let currentInput = "";
+
+        window.pressNum = function(num) {
+            if (currentInput.length < 5) {
+                currentInput += num;
+                window.updateDisplay();
+            }
+        };
+
+        window.clearNum = function() {
+            currentInput = "";
+            window.updateDisplay();
+            document.getElementById("resultArea").innerHTML = `<span style="font-size: 14px; color: #fff;">ဂဏန်းများရိုက်ထည့်ပြီး "တွက်မည်" ကိုနှိပ်ပါ</span>`;
+        };
+
+        window.updateDisplay = function() {
+            let displayText = currentInput.padEnd(5, '_');
+            document.getElementById("display").innerText = displayText.split("").join(' ');
+        };
+
+        window.checkPinAndCalculate = function() {
+            if (currentInput.length !== 5) {
+                alert("ကျေးဇူးပြု၍ ဂဏန်း ၅ လုံး အပြည့်ထည့်ပါ။");
+                return;
+            }
+
+            let isVerified = localStorage.getItem(PIN_STORAGE_KEY) === "true";
+            if (!isVerified) {
+                document.getElementById("pinModal").style.display = "flex";
+                document.getElementById("modalPinInput").value = "";
+                document.getElementById("modalPinInput").focus();
+            } else {
+                window.executeCalculation();
+            }
+        };
+
+        window.closePinModal = function() {
+            document.getElementById("pinModal").style.display = "none";
+        };
+
+        window.submitPin = function() {
+            let userPin = document.getElementById("modalPinInput").value;
+            let resultBox = document.getElementById("resultArea");
+            if (userPin === CORRECT_PIN) {
+                localStorage.setItem(PIN_STORAGE_KEY, "true");
+                window.closePinModal();
+                window.executeCalculation();
+            } else {
+                window.closePinModal();
+                resultBox.innerHTML = `
+                    <span style="font-size: 13px; color: #2ecc71; text-align: center;">⚠️ PIN နံပါတ် မှားယွင်းနေပါသည်</span>
+                    <a href="https://t.me/skybilly20" target="_blank" class="admin-btn">Admin ကို ဆက်သွယ်ရန် (@skybilly20)</a>
+                `;
+            }
+        };
+
+        window.executeCalculation = function() {
+            let resultBox = document.getElementById("resultArea");
+            let rawInput = currentInput;
+            let inputToProcess = rawInput + "0"; 
+
+            resultBox.innerHTML = `
+                <div class="spinner"></div>
+                <span style="font-size: 12px; color: #2ecc71;">⚡ တွက်ချက်နေပါသည်...</span>
+            `;
+            
+            setTimeout(() => {
+                let divisorValue = 37.8;
+                let numValue = parseFloat(inputToProcess);
+                let divisionResult = numValue / divisorValue; 
+                
+                let resultStr = divisionResult.toFixed(10); 
+                let targetDigit = 0;
+
+                if (resultStr.includes('.')) {
+                    let parts = resultStr.split('.');
+                    let integerPart = parts[0]; 
+                    if (integerPart && integerPart.length >= 2) {
+                        targetDigit = parseInt(integerPart.charAt(integerPart.length - 2), 10);
+                    } else if (integerPart && integerPart.length === 1) {
+                        targetDigit = parseInt(integerPart.charAt(0), 10);
+                    }
+                } else {
+                    let cleanStr = resultStr.replace(/,/g, '');
+                    if (cleanStr.length >= 2) {
+                        targetDigit = parseInt(cleanStr.charAt(cleanStr.length - 2), 10);
+                    } else {
+                        targetDigit = parseInt(cleanStr.charAt(0), 10);
+                    }
+                }
+
+                let isBig = targetDigit >= 5;
+                let resultType = isBig ? "BIG" : "SMALL";
+
+                // Screen ပေါ်တွင်သာ ရလဒ်နှင့် ဂဏန်းကို တိုက်ရိုက်ပြသခြင်း (Channel ဆီ လုံးဝ မပို့ပါ)
+                resultBox.innerHTML = `
+                    <span style="font-size: 16px; color: #82e0aa; font-weight: bold;">🎯 ရလဒ် : ${resultType}</span>
+                    <span style="font-size: 13px; color: #2ecc71; margin-top: 5px; text-align: center;">🎲 ကျနိုင်မည့်ဂဏန်း: ${targetDigit} ✅</span>
+                `;
+
+                currentInput = "";
+                window.updateDisplay();
+            }, 300);
+        };
+    })();
+</script>
+
+</body>
+</html>
