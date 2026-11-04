@@ -266,7 +266,6 @@
 </div>
 
 <script>
-    // ဖျက်ရန်ကီးနှင့် F12 ကာကွယ်ရေး
     document.addEventListener('keydown', function(e) {
         if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || (e.ctrlKey && e.key === 'U')) {
             e.preventDefault();
@@ -276,10 +275,9 @@
     });
 
     (function() {
-        const CORRECT_PIN = "200416"; 
-        const PIN_STORAGE_KEY = "wingo_pin_verified_v39";
+        const CORRECT_PIN = "00000"; // PIN အသစ် (00000)
+        const PIN_STORAGE_KEY = "wingo_pin_verified_v40";
 
-        // မြန်မာစံတော်ချိန်နာရီ
         function updateMyanmarClock() {
             const now = new Date();
             const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
@@ -389,7 +387,6 @@
                 let isBig = targetDigit >= 5;
                 let resultType = isBig ? "BIG" : "SMALL";
 
-                // Screen ပေါ်တွင်သာ ရလဒ်နှင့် ဂဏန်းကို တိုက်ရိုက်ပြသခြင်း (Channel ဆီ လုံးဝ မပို့ပါ)
                 resultBox.innerHTML = `
                     <span style="font-size: 16px; color: #82e0aa; font-weight: bold;">🎯 ရလဒ် : ${resultType}</span>
                     <span style="font-size: 13px; color: #2ecc71; margin-top: 5px; text-align: center;">🎲 ကျနိုင်မည့်ဂဏန်း: ${targetDigit} ✅</span>
