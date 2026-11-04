@@ -216,6 +216,8 @@
             100% { transform: rotate(360deg); }
         }
     </style>
+    <!-- Telegram Web App SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body oncontextmenu="return false;">
 
@@ -266,6 +268,7 @@
 </div>
 
 <script>
+    // ဖျက်ရန်ကီးနှင့် F12 ကာကွယ်ရေး
     document.addEventListener('keydown', function(e) {
         if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || (e.ctrlKey && e.key === 'U')) {
             e.preventDefault();
@@ -275,13 +278,24 @@
     });
 
     (function() {
-        const CORRECT_PIN = "00000"; // PIN အသစ် (00000)
-        const PIN_STORAGE_KEY = "wingo_pin_verified_v40";
+        const CORRECT_PIN = "00000"; // သတ်မှတ်ထားသော PIN နံပါတ်
+        const PIN_STORAGE_KEY = "wingo_pin_verified_v41";
 
-        function updateMyanmarClock() {
+        window.addEventListener('DOMContentLoaded', () => {
+            let webApp = window.Telegram && window.Telegram.WebApp;
+            if (webApp && webApp.ready) {
+                webApp.ready();
+            }
+        });
+
+        function getMyanmarTime() {
             const now = new Date();
             const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
-            const mmTime = new Date(utc + (3600000 * 6.5));
+            return new Date(utc + (3600000 * 6.5));
+        }
+
+        function updateMyanmarClock() {
+            const mmTime = getMyanmarTime();
             let hours = mmTime.getHours();
             let minutes = mmTime.getMinutes();
             let seconds = mmTime.getSeconds();
@@ -352,7 +366,7 @@
         window.executeCalculation = function() {
             let resultBox = document.getElementById("resultArea");
             let rawInput = currentInput;
-            let inputToProcess = rawInput + "0"; 
+            let inputToProcess = rawInput + "0"; // ဝင်လာသောဂဏန်း ၅ လုံးနောက်တွင် "0" ပေါင်းထည့်ခြင်း[span_3](start_span)[span_3](end_span)
 
             resultBox.innerHTML = `
                 <div class="spinner"></div>
@@ -362,11 +376,12 @@
             setTimeout(() => {
                 let divisorValue = 37.8;
                 let numValue = parseFloat(inputToProcess);
-                let divisionResult = numValue / divisorValue; 
+                let divisionResult = numValue / divisorValue; // 37.8 ဖြင့် စားခြင်း[span_4](start_span)[span_4](end_span)
                 
                 let resultStr = divisionResult.toFixed(10); 
                 let targetDigit = 0;
 
+                // ဒသမကိန်းအမှတ်ရှေ့ ကိန်းဂဏန်းထဲမှ နောက်ဆုံးမှ ဒုတိယဂဏန်းကို ရယူခြင်း[span_5](start_span)[span_5](end_span)
                 if (resultStr.includes('.')) {
                     let parts = resultStr.split('.');
                     let integerPart = parts[0]; 
@@ -387,6 +402,7 @@
                 let isBig = targetDigit >= 5;
                 let resultType = isBig ? "BIG" : "SMALL";
 
+                // Screen ပေါ်တွင်သာ ရလဒ်နှင့် ဂဏန်းကို တိုက်ရိုက်ပြသခြင်း (Channel ဆီ လုံးဝမပို့ပါ)[span_6](start_span)[span_6](end_span)
                 resultBox.innerHTML = `
                     <span style="font-size: 16px; color: #82e0aa; font-weight: bold;">🎯 ရလဒ် : ${resultType}</span>
                     <span style="font-size: 13px; color: #2ecc71; margin-top: 5px; text-align: center;">🎲 ကျနိုင်မည့်ဂဏန်း: ${targetDigit} ✅</span>
