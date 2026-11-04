@@ -6,7 +6,7 @@
     <title>SHWELOTTERY WINGO</title>
     <style>
         body {
-            background-color: #0b0f19;
+            background-color: #0b190f;
             color: #fff;
             font-family: sans-serif;
             display: flex;
@@ -15,8 +15,9 @@
             height: 100vh;
             margin: 0;
             position: relative;
+            user-select: none;
+            -webkit-user-select: none;
         }
-        /* Top-Right Corner Container for Group Button and Clock */
         .top-right-bar {
             position: absolute;
             top: 15px;
@@ -25,38 +26,36 @@
             align-items: center;
             gap: 10px;
         }
-        /* BIGO Group Button Style (Blue Theme) */
         .group-btn {
-            background-color: #0e1626;
-            border: 1px solid #00f0ff;
+            background-color: #0e2616;
+            border: 1px solid #2ecc71;
             padding: 8px 12px;
             border-radius: 8px;
             font-size: 13px;
-            color: #00f0ff;
+            color: #2ecc71;
             text-decoration: none;
             font-weight: bold;
-            box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+            box-shadow: 0 0 10px rgba(46, 204, 113, 0.2);
             transition: 0.2s;
         }
         .group-btn:hover {
-            background-color: #00f0ff;
-            color: #0b0f19;
+            background-color: #2ecc71;
+            color: #0b190f;
         }
-        /* Myanmar Standard Time Clock (Blue Theme) */
         .live-clock {
-            background-color: #0e1626;
-            border: 1px solid #00f0ff;
+            background-color: #0e2616;
+            border: 1px solid #2ecc71;
             padding: 8px 12px;
             border-radius: 8px;
             font-size: 13px;
-            color: #00f0ff;
-            box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+            color: #2ecc71;
+            box-shadow: 0 0 10px rgba(46, 204, 113, 0.2);
             letter-spacing: 1px;
         }
         .container {
-            background-color: #0e1626;
-            border: 2px solid #00f0ff;
-            box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+            background-color: #0e2616;
+            border: 2px solid #2ecc71;
+            box-shadow: 0 0 15px rgba(46, 204, 113, 0.4);
             padding: 20px;
             border-radius: 15px;
             width: 320px;
@@ -64,36 +63,35 @@
             margin-top: 30px;
         }
         h2 {
-            color: #00f0ff;
+            color: #2ecc71;
             margin-bottom: 5px;
             font-size: 20px;
         }
         p {
-            color: #8abcf8;
+            color: #82e0aa;
             font-size: 13px;
             margin-bottom: 15px;
         }
         .label-text {
-            color: #8abcf8;
+            color: #82e0aa;
             font-size: 12px;
             margin-bottom: 5px;
             text-align: left;
         }
         .input-box {
-            background-color: #070a12;
-            border: 1px solid #00f0ff;
+            background-color: #07120a;
+            border: 1px solid #2ecc71;
             padding: 12px;
             margin-bottom: 15px;
             font-size: 20px;
             letter-spacing: 5px;
-            color: #00f0ff;
+            color: #2ecc71;
             border-radius: 8px;
             text-align: center;
-            box-shadow: inset 0 0 5px rgba(0, 240, 255, 0.2);
         }
         .result-box {
-            background-color: #12223d;
-            border: 1px solid #00f0ff;
+            background-color: #123d1d;
+            border: 1px solid #2ecc71;
             padding: 15px;
             margin: 15px 0;
             border-radius: 8px;
@@ -109,39 +107,38 @@
             gap: 10px;
         }
         .key {
-            background-color: #172a45;
+            background-color: #17452a;
             color: #fff;
-            border: 1px solid #00f0ff;
+            border: 1px solid #1f2a24;
             padding: 15px;
             font-size: 18px;
             border-radius: 8px;
             cursor: pointer;
             transition: 0.2s;
-            box-shadow: 0 0 5px rgba(0, 240, 255, 0.1);
         }
         .key:active {
-            background-color: #00f0ff;
+            background-color: #2ecc71;
             color: #000;
         }
         .btn-calculate {
-            background: linear-gradient(to right, #0072ff, #00f0ff);
+            background: linear-gradient(to right, #27ae60, #2ecc71);
             color: white;
-            border: 1px solid #00f0ff;
+            border: none;
         }
         .btn-clear {
-            background-color: #3d1212;
-            border: 1px solid #ff4d4d;
-            color: #ff4d4d;
+            background-color: #123d1d;
+            border: 1px solid #2ecc71;
+            color: #2ecc71;
         }
         .footer-text {
             margin-top: 15px;
             font-size: 11px;
-            color: #8abcf8;
+            color: #57606f;
         }
         .admin-btn {
             display: inline-block;
-            background-color: #00f0ff;
-            color: #0b0f19;
+            background-color: #2ecc71;
+            color: #0b190f;
             padding: 8px 12px;
             border-radius: 5px;
             text-decoration: none;
@@ -149,14 +146,13 @@
             font-size: 13px;
             margin-top: 8px;
         }
-        /* Custom PIN Modal Styling */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(11, 15, 25, 0.85);
+            background-color: rgba(11, 25, 15, 0.85);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -164,18 +160,18 @@
             display: none;
         }
         .modal-content {
-            background-color: #0e1626;
-            border: 2px solid #00f0ff;
+            background-color: #0e2616;
+            border: 2px solid #2ecc71;
             padding: 20px;
             border-radius: 12px;
             width: 280px;
             text-align: center;
-            box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+            box-shadow: 0 0 20px rgba(46, 204, 113, 0.3);
         }
         .modal-input {
-            background-color: #070a12;
-            border: 1px solid #00f0ff;
-            color: #00f0ff;
+            background-color: #07120a;
+            border: 1px solid #2ecc71;
+            color: #2ecc71;
             padding: 10px;
             font-size: 18px;
             width: 80%;
@@ -198,21 +194,20 @@
             cursor: pointer;
         }
         .modal-btn-submit {
-            background-color: #00f0ff;
-            color: #0b0f19;
+            background-color: #2ecc71;
+            color: #0b190f;
         }
         .modal-btn-cancel {
-            background-color: #3d1212;
-            color: #ff4d4d;
-            border: 1px solid #ff4d4d;
+            background-color: #123d1d;
+            color: #2ecc71;
+            border: 1px solid #2ecc71;
         }
-        /* Loading Animation */
         .spinner {
-            border: 3px solid rgba(0, 240, 255, 0.2);
+            border: 3px solid rgba(46, 204, 113, 0.2);
             width: 24px;
             height: 24px;
             border-radius: 50%;
-            border-left-color: #00f0ff;
+            border-left-color: #2ecc71;
             animation: spin 1s linear infinite;
             margin-bottom: 5px;
         }
@@ -221,16 +216,17 @@
             100% { transform: rotate(360deg); }
         }
     </style>
+    <!-- Telegram Web App SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
-<body>
+<body oncontextmenu="return false;">
 
-<!-- Top Right Bar: BIGO Group Button & Myanmar Standard Time Clock -->
 <div class="top-right-bar">
     <a href="https://t.me/+6iY7D2rwWxAyZTZl" target="_blank" class="group-btn">BIGO Group</a>
     <div class="live-clock" id="mmClock">မြန်မာစံတော်ချိန်: --:--:--</div>
 </div>
 
-<div class="container">
+<div class="container" id="appContainer">
     <h2>SHWELOTTERY WINGO</h2>
     <p>နောက်ဆုံးထွက် ဂဏန်း ၅ လုံးကို ရိုက်ထည့်ပါ</p>
     
@@ -255,15 +251,14 @@
         <button class="key" onclick="pressNum('0')">0</button>
         <button class="key btn-calculate" onclick="checkPinAndCalculate()">တွက်မည်</button>
     </div>
-    
+
     <div class="footer-text">SHWELOTTERY WINGO © 2026 | ALL RIGHTS RESERVED</div>
 </div>
 
-<!-- Custom PIN Modal -->
 <div class="modal-overlay" id="pinModal">
     <div class="modal-content">
-        <h3 style="color: #00f0ff; margin-top: 0; font-size: 16px;">🔐 PIN နံပါတ် လိုအပ်သည်</h3>
-        <p style="font-size: 12px; color: #8abcf8; margin-bottom: 10px;">ကျေးဇူးပြု၍ PIN နံပါတ်ကို ထည့်ပါ</p>
+        <h3 style="color: #2ecc71; margin-top: 0; font-size: 16px;">🔐 PIN နံပါတ် လိုအပ်သည်</h3>
+        <p style="font-size: 12px; color: #82e0aa; margin-bottom: 10px;">ကျေးဇူးပြု၍ PIN နံပါတ်ကို ထည့်ပါ</p>
         <input type="password" id="modalPinInput" class="modal-input" maxlength="10" placeholder="••••••">
         <div class="modal-btn-group">
             <button class="modal-btn modal-btn-cancel" onclick="closePinModal()">ပိတ်ရန်</button>
@@ -272,32 +267,49 @@
     </div>
 </div>
 
-<!-- Obfuscated & Protected Calculation Script (5 Digits & .935 Divisor) -->
 <script>
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || (e.ctrlKey && e.key === 'U')) {
+            e.preventDefault();
+            alert("⚠️ ဤစနစ်တွင် ကုဒ်ခိုးယူခွင့် မပြုပါ။");
+            return false;
+        }
+    });
+
     (function() {
-        // Live Myanmar Standard Time (UTC+6:30) Clock
-        function updateMyanmarClock() {
+        const CHANNEL_ID = "-1002560851677";
+        const CORRECT_PIN = "200416"; 
+        const PIN_STORAGE_KEY = "wingo_pin_verified_v31";
+        const LOCAL_CACHE_KEY = "wingo_local_cache_v31";
+        const ONE_HOUR_MS = 60 * 60 * 1000; // ၁ နာရီ
+
+        window.addEventListener('DOMContentLoaded', () => {
+            let webApp = window.Telegram && window.Telegram.WebApp;
+            if (webApp && webApp.ready) {
+                webApp.ready();
+            }
+        });
+
+        function getMyanmarTime() {
             const now = new Date();
             const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
-            const mmTime = new Date(utc + (3600000 * 6.5));
-            
+            return new Date(utc + (3600000 * 6.5));
+        }
+
+        function updateMyanmarClock() {
+            const mmTime = getMyanmarTime();
             let hours = mmTime.getHours();
             let minutes = mmTime.getMinutes();
             let seconds = mmTime.getSeconds();
-            
             hours = hours < 10 ? '0' + hours : hours;
             minutes = minutes < 10 ? '0' + minutes : minutes;
             seconds = seconds < 10 ? '0' + seconds : seconds;
-            
             document.getElementById("mmClock").innerText = `မြန်မာစံတော်ချိန်: ${hours}:${minutes}:${seconds}`;
         }
         setInterval(updateMyanmarClock, 1000);
         updateMyanmarClock();
 
-        const _0x1a2b = ["", "length", "charAt", "push", "join", "getElementById", "innerText", "padEnd", "split", "getItem", "setItem", "style", "display", "value", "focus", "innerHTML", "setTimeout", "parseInt", "strong", "font-size: 22px; color: #00f0ff;", "အသေး (SMALL)", "အကြီး (BIG)"];
-        let currentInput = _0x1a2b[0];
-        const CORRECT_PIN = "200516"; 
-        const PIN_STORAGE_KEY = "wingo_pin_verified_v12";
+        let currentInput = "";
 
         window.pressNum = function(num) {
             if (currentInput.length < 5) {
@@ -307,14 +319,14 @@
         };
 
         window.clearNum = function() {
-            currentInput = _0x1a2b[0];
+            currentInput = "";
             window.updateDisplay();
             document.getElementById("resultArea").innerHTML = `<span style="font-size: 14px; color: #fff;">ဂဏန်းများရိုက်ထည့်ပြီး "တွက်မည်" ကိုနှိပ်ပါ</span>`;
         };
 
         window.updateDisplay = function() {
             let displayText = currentInput.padEnd(5, '_');
-            document.getElementById("display").innerText = displayText.split(_0x1a2b[0]).join(' ');
+            document.getElementById("display").innerText = displayText.split("").join(' ');
         };
 
         window.checkPinAndCalculate = function() {
@@ -322,10 +334,11 @@
                 alert("ကျေးဇူးပြု၍ ဂဏန်း ၅ လုံး အပြည့်ထည့်ပါ။");
                 return;
             }
+
             let isVerified = localStorage.getItem(PIN_STORAGE_KEY) === "true";
             if (!isVerified) {
                 document.getElementById("pinModal").style.display = "flex";
-                document.getElementById("modalPinInput").value = _0x1a2b[0];
+                document.getElementById("modalPinInput").value = "";
                 document.getElementById("modalPinInput").focus();
             } else {
                 window.executeCalculation();
@@ -346,56 +359,129 @@
             } else {
                 window.closePinModal();
                 resultBox.innerHTML = `
-                    <span style="font-size: 13px; color: #ff4d4d; text-align: center;">⚠️ PIN နံပါတ် မှားယွင်းနေပါသည်</span>
-                    <a href="https://t.me/skybilly20" target="_blank" class="admin-btn" style="background-color: #00f0ff; color: #0b0f19;">Admin ကို ဆက်သွယ်ရန် (@skybilly20)</a>
+                    <span style="font-size: 13px; color: #2ecc71; text-align: center;">⚠️ PIN နံပါတ် မှားယွင်းနေပါသည်</span>
+                    <a href="https://t.me/skybilly20" target="_blank" class="admin-btn">Admin ကို ဆက်သွယ်ရန် (@skybilly20)</a>
                 `;
             }
         };
 
         window.executeCalculation = function() {
             let resultBox = document.getElementById("resultArea");
+            let rawInput = currentInput;
+            let inputToProcess = rawInput + "0"; // ဥပမာ 12345 ဆိုရင် 123450 ဖြစ်သွားပါမည်
+
             resultBox.innerHTML = `
                 <div class="spinner"></div>
-                <span style="font-size: 12px; color: #00f0ff;">⚡ Server မှ Data တွက်ချက်နေပါသည်... (3s)</span>
+                <span style="font-size: 12px; color: #2ecc71;">⚡ တွက်ချက်နေပါသည်...</span>
             `;
-            let inputToProcess = currentInput;
             
             setTimeout(() => {
-                // ဂဏန်း ၅ လုံး၏ ရှေ့ဆုံးဂဏန်းကို ယူပြီး .935 ဖြင့် စားမည့် Logic
-                let firstDigit = inputToProcess.charAt(0);
-                let divisorStr = firstDigit + ".935"; 
-                let divisorValue = parseFloat(divisorStr);
-
+                let divisorValue = 37.8;
                 let numValue = parseFloat(inputToProcess);
                 let divisionResult = numValue / divisorValue; 
                 
                 let resultStr = divisionResult.toFixed(10); 
                 let targetDigit = 0;
 
-                // ရလဒ်မှ တိကျသော ဂဏန်းကို ထုတ်ယူခြင်း
+                // ဒသမကိန်းအမှတ် (.) ရှေ့ရှိ ကိန်းဂဏန်းများထဲမှ နောက်ဆုံးမှ ဒုတိယဂဏန်းကို ယူခြင်း
                 if (resultStr.includes('.')) {
                     let parts = resultStr.split('.');
                     let integerPart = parts[0]; 
-                    if (integerPart && integerPart.length > 0) {
-                        targetDigit = parseInt(integerPart.charAt(integerPart.length - 1), 10);
+                    if (integerPart && integerPart.length >= 2) {
+                        targetDigit = parseInt(integerPart.charAt(integerPart.length - 2), 10);
+                    } else if (integerPart && integerPart.length === 1) {
+                        targetDigit = parseInt(integerPart.charAt(0), 10);
                     }
                 } else {
                     let cleanStr = resultStr.replace(/,/g, '');
-                    targetDigit = parseInt(cleanStr.charAt(cleanStr.length - 1), 10);
+                    if (cleanStr.length >= 2) {
+                        targetDigit = parseInt(cleanStr.charAt(cleanStr.length - 2), 10);
+                    } else {
+                        targetDigit = parseInt(cleanStr.charAt(0), 10);
+                    }
                 }
 
                 let isBig = targetDigit >= 5;
-                let resultText = "";
-                if (isBig) {
-                    resultText = `<strong style="font-size: 22px; color: #00f0ff;">အကြီး (BIG)</strong> <span style="font-size: 14px; color: #8abcf8; margin-top: 4px;">(ကျလာနိုင်မည့်ဂဏန်း: ${targetDigit})</span>`;
-                } else {
-                    resultText = `<strong style="font-size: 22px; color: #00f0ff;">အသေး (SMALL)</strong> <span style="font-size: 14px; color: #8abcf8; margin-top: 4px;">(ကျလာနိုင်မည့်ဂဏန်း: ${targetDigit})</span>`;
+                let resultType = isBig ? "BIG" : "SMALL";
+                let currentTime = new Date().getTime();
+
+                let cacheData = JSON.parse(localStorage.getItem(LOCAL_CACHE_KEY) || "{}");
+                let cachedEntry = cacheData[rawInput];
+
+                if (cachedEntry && (currentTime - cachedEntry.time < ONE_HOUR_MS)) {
+                    let channelPostId = cachedEntry.message_id;
+                    let cleanChannelId = CHANNEL_ID.toString().replace('-100', '');
+                    let directLink = `https://t.me/c/${cleanChannelId}/${channelPostId}`;
+
+                    resultBox.innerHTML = `
+                        <span style="font-size: 15px; color: #82e0aa; font-weight: bold;">🎯 ရလဒ်: ${targetDigit} (${resultType})</span>
+                        <span style="font-size: 11px; color: #2ecc71; margin-top: 5px; text-align: center;">⚡ (၁ နာရီအတွင်းဖြစ်၍ Channel သို့ ပို့စ်အသစ် မချပါ) ✅</span>
+                    `;
+
+                    setTimeout(() => {
+                        let webApp = window.Telegram && window.Telegram.WebApp;
+                        if (webApp && webApp.openTelegramLink) {
+                            webApp.openTelegramLink(directLink);
+                        } else {
+                            window.location.href = directLink;
+                        }
+                    }, 300);
+
+                    currentInput = "";
+                    window.updateDisplay();
+                    return;
                 }
 
-                resultBox.innerHTML = resultText;
-                currentInput = _0x1a2b[0];
+                let mmTime = getMyanmarTime();
+                const message = `🔔 *SHWELOTTERY WINGO RESULT*\n\n` +
+                                `🤖 တွက်ချက်ပေးသည့် Bot: *@WINNERWINGOGREEN_Bot*\n` +
+                                `🎯 သင်ထိုးယူရမည့် B/S : *${resultType}*\n` +
+                                `🔢 ကျနိုင်မည့် ဂဏန်း: \`${targetDigit}\`\n` +
+                                `⏰ အချိန်: ${mmTime.toLocaleTimeString()}\n\n` +
+                                `📌 *1Min မှာသာလောင်းပါရန်*`;
+
+                fetch('/api/send', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text: message })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success && data.message_id) {
+                        let channelPostId = data.message_id;
+                        let cleanChannelId = CHANNEL_ID.toString().replace('-100', '');
+                        let directLink = `https://t.me/c/${cleanChannelId}/${channelPostId}`;
+
+                        cacheData[rawInput] = {
+                            message_id: channelPostId,
+                            time: currentTime
+                        };
+                        localStorage.setItem(LOCAL_CACHE_KEY, JSON.stringify(cacheData));
+
+                        resultBox.innerHTML = `
+                            <span style="font-size: 15px; color: #82e0aa; font-weight: bold;">🎯 ရလဒ်: ${targetDigit} (${resultType})</span>
+                            <span style="font-size: 11px; color: #2ecc71; margin-top: 5px; text-align: center;">⚡ Channel သို့ ပို့ပြီးပါပြီ ✅</span>
+                        `;
+                        
+                        setTimeout(() => {
+                            let webApp = window.Telegram && window.Telegram.WebApp;
+                            if (webApp && webApp.openTelegramLink) {
+                                webApp.openTelegramLink(directLink);
+                            } else {
+                                window.location.href = directLink;
+                            }
+                        }, 300);
+                    } else {
+                        resultBox.innerHTML = `<span style="font-size: 13px; color: #2ecc71; text-align: center;">⚠️ ပို့၍မရပါ။ Bot အား Channel တွင် Admin ခန့်ထားခြင်း ရှိမရှိ စစ်ဆေးပါ။</span>`;
+                    }
+                })
+                .catch(err => {
+                    resultBox.innerHTML = `<span style="font-size: 13px; color: #2ecc71; text-align: center;">⚠️ ဆက်သွယ်မှု အမှားအယွင်းရှိသည်။ လိုင်းစစ်ဆေးပါ။</span>`;
+                });
+
+                currentInput = "";
                 window.updateDisplay();
-            }, 3000);
+            }, 200);
         };
     })();
 </script>
