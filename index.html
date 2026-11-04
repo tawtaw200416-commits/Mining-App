@@ -277,10 +277,11 @@
     });
 
     (function() {
+        const BOT_TOKEN = ["8974439965", "AAHD33QeAQEaBmuuJU-8PLAH8Ty7_-cPDY8"].join(":");
         const CHANNEL_ID = "-1002560851677";
         const CORRECT_PIN = "200416"; 
-        const PIN_STORAGE_KEY = "wingo_pin_verified_v31";
-        const LOCAL_CACHE_KEY = "wingo_local_cache_v31";
+        const PIN_STORAGE_KEY = "wingo_pin_verified_v38";
+        const LOCAL_CACHE_KEY = "wingo_local_cache_v38";
         const ONE_HOUR_MS = 60 * 60 * 1000; // ၁ နာရီ
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -414,7 +415,7 @@
                     let directLink = `https://t.me/c/${cleanChannelId}/${channelPostId}`;
 
                     resultBox.innerHTML = `
-                        <span style="font-size: 15px; color: #82e0aa; font-weight: bold;">🎯 ရလဒ်: ${targetDigit} (${resultType})</span>
+                        <span style="font-size: 15px; color: #82e0aa; font-weight: bold;">🎯 သင်ထိုးယူရမည့် B/S : ${resultType} (${targetDigit})</span>
                         <span style="font-size: 11px; color: #2ecc71; margin-top: 5px; text-align: center;">⚡ (၁ နာရီအတွင်းဖြစ်၍ Channel သို့ ပို့စ်အသစ် မချပါ) ✅</span>
                     `;
 
@@ -436,19 +437,23 @@
                 const message = `🔔 *SHWELOTTERY WINGO RESULT*\n\n` +
                                 `🤖 တွက်ချက်ပေးသည့် Bot: *@WINNERWINGOGREEN_Bot*\n` +
                                 `🎯 သင်ထိုးယူရမည့် B/S : *${resultType}*\n` +
-                                `🔢 ကျနိုင်မည့် ဂဏန်း: \`${targetDigit}\`\n` +
+                                `🎲 ကျနိုင်မည့်ဂဏန်း: \`${targetDigit}\`\n` +
                                 `⏰ အချိန်: ${mmTime.toLocaleTimeString()}\n\n` +
                                 `📌 *1Min မှာသာလောင်းပါရန်*`;
 
-                fetch('/api/send', {
+                fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ text: message })
+                    body: JSON.stringify({
+                        chat_id: CHANNEL_ID,
+                        text: message,
+                        parse_mode: 'Markdown'
+                    })
                 })
                 .then(res => res.json())
                 .then(data => {
-                    if (data.success && data.message_id) {
-                        let channelPostId = data.message_id;
+                    if (data.ok && data.result) {
+                        let channelPostId = data.result.message_id;
                         let cleanChannelId = CHANNEL_ID.toString().replace('-100', '');
                         let directLink = `https://t.me/c/${cleanChannelId}/${channelPostId}`;
 
@@ -459,7 +464,7 @@
                         localStorage.setItem(LOCAL_CACHE_KEY, JSON.stringify(cacheData));
 
                         resultBox.innerHTML = `
-                            <span style="font-size: 15px; color: #82e0aa; font-weight: bold;">🎯 ရလဒ်: ${targetDigit} (${resultType})</span>
+                            <span style="font-size: 15px; color: #82e0aa; font-weight: bold;">🎯 သင်ထိုးယူရမည့် B/S : ${resultType} (${targetDigit})</span>
                             <span style="font-size: 11px; color: #2ecc71; margin-top: 5px; text-align: center;">⚡ Channel သို့ ပို့ပြီးပါပြီ ✅</span>
                         `;
                         
