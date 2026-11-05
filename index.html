@@ -14,8 +14,43 @@
             align-items: center;
             height: 100vh;
             margin: 0;
+            position: relative;
             user-select: none;
             -webkit-user-select: none;
+        }
+        .top-right-bar {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .group-btn {
+            background-color: #0e2616;
+            border: 1px solid #2ecc71;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #2ecc71;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(46, 204, 113, 0.2);
+            transition: 0.2s;
+        }
+        .group-btn:hover {
+            background-color: #2ecc71;
+            color: #0b190f;
+        }
+        .live-clock {
+            background-color: #0e2616;
+            border: 1px solid #2ecc71;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #2ecc71;
+            box-shadow: 0 0 10px rgba(46, 204, 113, 0.2);
+            letter-spacing: 1px;
         }
         .container {
             background-color: #0e2616;
@@ -25,6 +60,7 @@
             border-radius: 15px;
             width: 320px;
             text-align: center;
+            margin-top: 30px;
         }
         h2 {
             color: #2ecc71;
@@ -103,14 +139,13 @@
             display: inline-block;
             background-color: #2ecc71;
             color: #0b190f;
-            padding: 6px 10px;
+            padding: 8px 12px;
             border-radius: 5px;
             text-decoration: none;
             font-weight: bold;
-            font-size: 12px;
-            margin-top: 6px;
+            font-size: 13px;
+            margin-top: 8px;
         }
-        /* Modal Style for PIN */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -129,7 +164,7 @@
             border: 2px solid #2ecc71;
             padding: 20px;
             border-radius: 12px;
-            width: 260px;
+            width: 280px;
             text-align: center;
             box-shadow: 0 0 20px rgba(46, 204, 113, 0.3);
         }
@@ -152,7 +187,7 @@
         }
         .modal-btn {
             flex: 1;
-            padding: 8px;
+            padding: 10px;
             border: none;
             border-radius: 6px;
             font-weight: bold;
@@ -167,7 +202,6 @@
             color: #2ecc71;
             border: 1px solid #2ecc71;
         }
-        /* Loading Animation */
         .spinner {
             border: 3px solid rgba(46, 204, 113, 0.2);
             width: 24px;
@@ -182,10 +216,17 @@
             100% { transform: rotate(360deg); }
         }
     </style>
+    <!-- Telegram Web App SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body oncontextmenu="return false;">
 
-<div class="container">
+<div class="top-right-bar">
+    <a href="https://t.me/+6iY7D2rwWxAyZTZl" target="_blank" class="group-btn">BIGO Group</a>
+    <div class="live-clock" id="mmClock">မြန်မာစံတော်ချိန်: --:--:--</div>
+</div>
+
+<div class="container" id="appContainer">
     <h2>SHWELOTTERY WINGO</h2>
     <p>နောက်ဆုံးထွက် ဂဏန်း ၅ လုံးကို ရိုက်ထည့်ပါ</p>
     
@@ -210,11 +251,10 @@
         <button class="key" onclick="pressNum('0')">0</button>
         <button class="key btn-calculate" onclick="checkPinAndCalculate()">တွက်မည်</button>
     </div>
-    
+
     <div class="footer-text">SHWELOTTERY WINGO © 2026 | ALL RIGHTS RESERVED</div>
 </div>
 
-<!-- PIN Modal -->
 <div class="modal-overlay" id="pinModal">
     <div class="modal-content">
         <h3 style="color: #2ecc71; margin-top: 0; font-size: 16px;">🔐 PIN နံပါတ် လိုအပ်သည်</h3>
@@ -228,7 +268,7 @@
 </div>
 
 <script>
-    // ကုဒ်ခိုးယူမှု (F12, Right-Click, Ctrl+U) ကာကွယ်ရေး
+    // F12၊ ညာကလစ်နှင့် ကုဒ်ခိုးယူမှု ကာကွယ်ရေး
     document.addEventListener('keydown', function(e) {
         if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || (e.ctrlKey && e.key === 'U')) {
             e.preventDefault();
@@ -237,116 +277,141 @@
         }
     });
 
-    let currentInput = "";
-    const CORRECT_PIN = "200026";
-    const PIN_STORAGE_KEY = "wingo_pin_verified_v43";
+    (function() {
+        const CORRECT_PIN = "111111"; // ပြောင်းလဲထားသော PIN အသစ်
+        const PIN_STORAGE_KEY = "wingo_pin_verified_v57"; // Cache ရှောင်ရှားရန် ဗားရှင်းအသစ်
 
-    function pressNum(num) {
-        if (currentInput.length < 5) {
-            currentInput += num;
-            updateDisplay();
-        }
-    }
+        window.addEventListener('DOMContentLoaded', () => {
+            let webApp = window.Telegram && window.Telegram.WebApp;
+            if (webApp && webApp.ready) {
+                webApp.ready();
+            }
+        });
 
-    function clearNum() {
-        currentInput = "";
-        updateDisplay();
-        document.getElementById("resultArea").innerHTML = 
-            `<span style="font-size: 14px; color: #fff;">ဂဏန်းများရိုက်ထည့်ပြီး "တွက်မည်" ကိုနှိပ်ပါ</span>`;
-    }
-
-    function updateDisplay() {
-        let displayText = currentInput.padEnd(5, '_');
-        document.getElementById("display").innerText = displayText.split('').join(' ');
-    }
-
-    function checkPinAndCalculate() {
-        if (currentInput.length !== 5) {
-            alert("ကျေးဇူးပြု၍ ဂဏန်း ၅ လုံး အပြည့်ထည့်ပါ။");
-            return;
+        function getMyanmarTime() {
+            const now = new Date();
+            const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+            return new Date(utc + (3600000 * 6.5));
         }
 
-        let isVerified = localStorage.getItem(PIN_STORAGE_KEY) === "true";
-        if (!isVerified) {
-            document.getElementById("pinModal").style.display = "flex";
-            document.getElementById("modalPinInput").value = "";
-            document.getElementById("modalPinInput").focus();
-        } else {
-            executeCalculation();
+        function updateMyanmarClock() {
+            const mmTime = getMyanmarTime();
+            let hours = mmTime.getHours();
+            let minutes = mmTime.getMinutes();
+            let seconds = mmTime.getSeconds();
+            hours = hours < 10 ? '0' + hours : hours;
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+            document.getElementById("mmClock").innerText = `မြန်မာစံတော်ချိန်: ${hours}:${minutes}:${seconds}`;
         }
-    }
+        setInterval(updateMyanmarClock, 1000);
+        updateMyanmarClock();
 
-    function closePinModal() {
-        document.getElementById("pinModal").style.display = "none";
-    }
+        let currentInput = "";
 
-    function submitPin() {
-        let userPin = document.getElementById("modalPinInput").value;
-        let resultBox = document.getElementById("resultArea");
-        if (userPin === CORRECT_PIN) {
-            localStorage.setItem(PIN_STORAGE_KEY, "true");
-            closePinModal();
-            executeCalculation();
-        } else {
-            closePinModal();
-            resultBox.innerHTML = `
-                <span style="font-size: 12px; color: #2ecc71; text-align: center;">⚠️ PIN နံပါတ် မှားယွင်းနေပါသည်</span>
-                <a href="https://t.me/skybilly20" target="_blank" class="admin-btn">Admin ကို ဆက်သွယ်ရန် (@skybilly20)</a>
-            `;
-        }
-    }
+        window.pressNum = function(num) {
+            if (currentInput.length < 5) {
+                currentInput += num;
+                window.updateDisplay();
+            }
+        };
 
-    function executeCalculation() {
-        let resultBox = document.getElementById("resultArea");
+        window.clearNum = function() {
+            currentInput = "";
+            window.updateDisplay();
+            document.getElementById("resultArea").innerHTML = `<span style="font-size: 14px; color: #fff;">ဂဏန်းများရိုက်ထည့်ပြီး "တွက်မည်" ကိုနှိပ်ပါ</span>`;
+        };
 
-        // ၃ စက္ကန့် Loading ပြရန်
-        resultBox.innerHTML = `
-            <div class="spinner"></div>
-            <span style="font-size: 12px; color: #2ecc71;">⚡ တွက်ချက်နေပါသည်... (3s)</span>
-        `;
+        window.updateDisplay = function() {
+            let displayText = currentInput.padEnd(5, '_');
+            document.getElementById("display").innerText = displayText.split("").join(' ');
+        };
 
-        let inputToProcess = currentInput;
-
-        setTimeout(() => {
-            let divisorValue = 43.3; // 43.3 ဖြင့် စားခြင်း
-            let numValue = parseFloat(inputToProcess);
-            let divisionResult = numValue / divisorValue; 
-            
-            let resultStr = divisionResult.toFixed(10); 
-            let targetDigit = 0;
-
-            // ဒသမကိန်းအမှတ် (.) ရှေ့ရှိ ကိန်းဂဏန်းများထဲမှ နောက်ဆုံးမှ ဒုတိယဂဏန်းကို တိကျစွာ ယူခြင်း
-            if (resultStr.includes('.')) {
-                let parts = resultStr.split('.');
-                let integerPart = parts[0]; 
-                if (integerPart && integerPart.length >= 2) {
-                    targetDigit = parseInt(integerPart.charAt(integerPart.length - 2), 10);
-                } else if (integerPart && integerPart.length === 1) {
-                    targetDigit = parseInt(integerPart.charAt(0), 10);
-                }
-            } else {
-                let cleanStr = resultStr.replace(/,/g, '');
-                if (cleanStr.length >= 2) {
-                    targetDigit = parseInt(cleanStr.charAt(cleanStr.length - 2), 10);
-                } else {
-                    targetDigit = parseInt(cleanStr.charAt(0), 10);
-                }
+        window.checkPinAndCalculate = function() {
+            if (currentInput.length !== 5) {
+                alert("ကျေးဇူးပြု၍ ဂဏန်း ၅ လုံး အပြည့်ထည့်ပါ။");
+                return;
             }
 
-            let isBig = targetDigit >= 5;
-            let resultType = isBig ? "အကြီး (BIG)" : "အသေး (SMALL)";
+            let isVerified = localStorage.getItem(PIN_STORAGE_KEY) === "true";
+            if (!isVerified) {
+                document.getElementById("pinModal").style.display = "flex";
+                document.getElementById("modalPinInput").value = "";
+                document.getElementById("modalPinInput").focus();
+            } else {
+                window.executeCalculation();
+            }
+        };
 
-            let resultText = `
-                <span style="font-size: 12px; color: #82e0aa;">🎯 ရလဒ် : <strong style="font-size: 18px; color: #2ecc71;">${resultType}</strong></span><br>
-                <span style="font-size: 13px; color: #2ecc71;">🎲 ကျနိုင်မည့်ဂဏန်း: ${targetDigit} ✅</span>
+        window.closePinModal = function() {
+            document.getElementById("pinModal").style.display = "none";
+        };
+
+        window.submitPin = function() {
+            let userPin = document.getElementById("modalPinInput").value;
+            let resultBox = document.getElementById("resultArea");
+            if (userPin === CORRECT_PIN) {
+                localStorage.setItem(PIN_STORAGE_KEY, "true");
+                window.closePinModal();
+                window.executeCalculation();
+            } else {
+                window.closePinModal();
+                resultBox.innerHTML = `
+                    <span style="font-size: 13px; color: #2ecc71; text-align: center;">⚠️ PIN နံပါတ် မှားယွင်းနေပါသည်</span>
+                    <a href="https://t.me/skybilly20" target="_blank" class="admin-btn">Admin ကို ဆက်သွယ်ရန် (@skybilly20)</a>
+                `;
+            }
+        };
+
+        window.executeCalculation = function() {
+            let resultBox = document.getElementById("resultArea");
+            let rawInput = currentInput;
+            let inputToProcess = rawInput + "4"; // ရိုက်လိုက်သော ဂဏန်း ၅ လုံးနောက်တွင် '4' ကို နောက်ကွယ်မှ အမြဲတမ်းထည့်ခြင်း[span_0](start_span)[span_0](end_span)
+
+            resultBox.innerHTML = `
+                <div class="spinner"></div>
+                <span style="font-size: 12px; color: #2ecc71;">⚡ တွက်ချက်နေပါသည်...</span>
             `;
+            
+            setTimeout(() => {
+                let divisorValue = 393.3; // 393.3 ဖြင့် စားခြင်း[span_1](start_span)[span_1](end_span)
+                let numValue = parseFloat(inputToProcess);
+                let divisionResult = numValue / divisorValue; 
+                
+                let resultStr = divisionResult.toFixed(10); 
+                let targetDigit = 0;
 
-            resultBox.innerHTML = resultText;
+                // ဒသမကိန်းအမှတ် (.) ရှေ့ရှိ ကိန်းဂဏန်းများထဲမှ နောက်ဆုံးမှ ဒုတိယမြောက်နေရာ (ဥပမာ: 12345.3736 ဆိုရင် 4 ရှိသောနေရာ) ကို ယူခြင်း
+                if (resultStr.includes('.')) {
+                    let parts = resultStr.split('.');
+                    let integerPart = parts[0]; // ဥပမာ: 12345
+                    if (integerPart && integerPart.length >= 2) {
+                        targetDigit = parseInt(integerPart.charAt(integerPart.length - 2), 10);
+                    } else if (integerPart && integerPart.length === 1) {
+                        targetDigit = parseInt(integerPart.charAt(0), 10);
+                    }
+                } else {
+                    let cleanStr = resultStr.replace(/,/g, '');
+                    if (cleanStr.length >= 2) {
+                        targetDigit = parseInt(cleanStr.charAt(cleanStr.length - 2), 10);
+                    } else {
+                        targetDigit = parseInt(cleanStr.charAt(0), 10);
+                    }
+                }
 
-            currentInput = "";
-            updateDisplay();
-        }, 3000); 
-    }
+                let isBig = targetDigit >= 5;
+                let resultType = isBig ? "BIG" : "SMALL";
+
+                resultBox.innerHTML = `
+                    <span style="font-size: 16px; color: #82e0aa; font-weight: bold;">🎯 ရလဒ် : ${resultType}</span>
+                    <span style="font-size: 13px; color: #2ecc71; margin-top: 5px; text-align: center;">🎲 ကျနိုင်မည့်ဂဏန်း: ${targetDigit} ✅</span>
+                `;
+
+                currentInput = "";
+                window.updateDisplay();
+            }, 300);
+        };
+    })();
 </script>
 
 </body>
