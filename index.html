@@ -1,4 +1,3 @@
-Crypto:
 <!DOCTYPE html>
 <html lang="my">
 <head>
@@ -7,7 +6,7 @@ Crypto:
     <title>SHWELOTTERY WINGO</title>
     <style>
         body {
-            background-color: #0b0f19;
+            background-color: #0b190f;
             color: #fff;
             font-family: sans-serif;
             display: flex;
@@ -15,46 +14,48 @@ Crypto:
             align-items: center;
             height: 100vh;
             margin: 0;
+            user-select: none;
+            -webkit-user-select: none;
         }
         .container {
-            background-color: #0e1626;
-            border: 2px solid #00d2ff;
-            box-shadow: 0 0 15px rgba(0, 210, 255, 0.4);
+            background-color: #0e2616;
+            border: 2px solid #2ecc71;
+            box-shadow: 0 0 15px rgba(46, 204, 113, 0.4);
             padding: 20px;
             border-radius: 15px;
             width: 320px;
             text-align: center;
         }
         h2 {
-            color: #00d2ff;
+            color: #2ecc71;
             margin-bottom: 5px;
             font-size: 20px;
         }
         p {
-            color: #8ab4f8;
+            color: #82e0aa;
             font-size: 13px;
             margin-bottom: 15px;
         }
         .label-text {
-            color: #8ab4f8;
+            color: #82e0aa;
             font-size: 12px;
             margin-bottom: 5px;
             text-align: left;
         }
         .input-box {
-            background-color: #070a12;
-            border: 1px solid #00d2ff;
+            background-color: #07120a;
+            border: 1px solid #2ecc71;
             padding: 12px;
             margin-bottom: 15px;
             font-size: 20px;
             letter-spacing: 5px;
-            color: #00d2ff;
+            color: #2ecc71;
             border-radius: 8px;
             text-align: center;
         }
         .result-box {
-            background-color: #10203d;
-            border: 1px solid #00d2ff;
+            background-color: #123d1d;
+            border: 1px solid #2ecc71;
             padding: 15px;
             margin: 15px 0;
             border-radius: 8px;
@@ -70,9 +71,9 @@ Crypto:
             gap: 10px;
         }
         .key {
-            background-color: #172a45;
+            background-color: #17452a;
             color: #fff;
-            border: 1px solid #1f4068;
+            border: 1px solid #1f2a24;
             padding: 15px;
             font-size: 18px;
             border-radius: 8px;
@@ -80,31 +81,99 @@ Crypto:
             transition: 0.2s;
         }
         .key:active {
-            background-color: #00d2ff;
+            background-color: #2ecc71;
             color: #000;
         }
         .btn-calculate {
-            background: linear-gradient(to right, #00c6ff, #0072ff);
+            background: linear-gradient(to right, #27ae60, #2ecc71);
             color: white;
             border: none;
         }
         .btn-clear {
-            background-color: #3d1212;
-            border: 1px solid #ff4d4d;
-            color: #ff4d4d;
+            background-color: #123d1d;
+            border: 1px solid #2ecc71;
+            color: #2ecc71;
         }
         .footer-text {
             margin-top: 15px;
             font-size: 11px;
             color: #57606f;
         }
+        .admin-btn {
+            display: inline-block;
+            background-color: #2ecc71;
+            color: #0b190f;
+            padding: 6px 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 12px;
+            margin-top: 6px;
+        }
+        /* Modal Style for PIN */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(11, 25, 15, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            display: none;
+        }
+        .modal-content {
+            background-color: #0e2616;
+            border: 2px solid #2ecc71;
+            padding: 20px;
+            border-radius: 12px;
+            width: 260px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(46, 204, 113, 0.3);
+        }
+        .modal-input {
+            background-color: #07120a;
+            border: 1px solid #2ecc71;
+            color: #2ecc71;
+            padding: 10px;
+            font-size: 18px;
+            width: 80%;
+            text-align: center;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            letter-spacing: 3px;
+        }
+        .modal-btn-group {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        .modal-btn {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .modal-btn-submit {
+            background-color: #2ecc71;
+            color: #0b190f;
+        }
+        .modal-btn-cancel {
+            background-color: #123d1d;
+            color: #2ecc71;
+            border: 1px solid #2ecc71;
+        }
         /* Loading Animation */
         .spinner {
-            border: 3px solid rgba(0, 210, 255, 0.2);
+            border: 3px solid rgba(46, 204, 113, 0.2);
             width: 24px;
             height: 24px;
             border-radius: 50%;
-            border-left-color: #00d2ff;
+            border-left-color: #2ecc71;
             animation: spin 1s linear infinite;
             margin-bottom: 5px;
         }
@@ -114,7 +183,7 @@ Crypto:
         }
     </style>
 </head>
-<body>
+<body oncontextmenu="return false;">
 
 <div class="container">
     <h2>SHWELOTTERY WINGO</h2>
@@ -131,8 +200,7 @@ Crypto:
         <button class="key" onclick="pressNum('1')">1</button>
         <button class="key" onclick="pressNum('2')">2</button>
         <button class="key" onclick="pressNum('3')">3</button>
-
-<button class="key" onclick="pressNum('4')">4</button>
+        <button class="key" onclick="pressNum('4')">4</button>
         <button class="key" onclick="pressNum('5')">5</button>
         <button class="key" onclick="pressNum('6')">6</button>
         <button class="key" onclick="pressNum('7')">7</button>
@@ -140,14 +208,38 @@ Crypto:
         <button class="key" onclick="pressNum('9')">9</button>
         <button class="key btn-clear" onclick="clearNum()">ဖျက်ရန်</button>
         <button class="key" onclick="pressNum('0')">0</button>
-        <button class="key btn-calculate" onclick="calculateResult()">တွက်မည်</button>
+        <button class="key btn-calculate" onclick="checkPinAndCalculate()">တွက်မည်</button>
     </div>
     
     <div class="footer-text">SHWELOTTERY WINGO © 2026 | ALL RIGHTS RESERVED</div>
 </div>
 
+<!-- PIN Modal -->
+<div class="modal-overlay" id="pinModal">
+    <div class="modal-content">
+        <h3 style="color: #2ecc71; margin-top: 0; font-size: 16px;">🔐 PIN နံပါတ် လိုအပ်သည်</h3>
+        <p style="font-size: 12px; color: #82e0aa; margin-bottom: 10px;">ကျေးဇူးပြု၍ PIN နံပါတ်ကို ထည့်ပါ</p>
+        <input type="password" id="modalPinInput" class="modal-input" maxlength="10" placeholder="••••••">
+        <div class="modal-btn-group">
+            <button class="modal-btn modal-btn-cancel" onclick="closePinModal()">ပိတ်ရန်</button>
+            <button class="modal-btn modal-btn-submit" onclick="submitPin()">အတည်ပြု</button>
+        </div>
+    </div>
+</div>
+
 <script>
+    // ကုဒ်ခိုးယူမှု (F12, Right-Click, Ctrl+U) ကာကွယ်ရေး
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || (e.ctrlKey && e.key === 'U')) {
+            e.preventDefault();
+            alert("⚠️ ဤစနစ်တွင် ကုဒ်ခိုးယူခွင့် မပြုပါ။");
+            return false;
+        }
+    });
+
     let currentInput = "";
+    const CORRECT_PIN = "200026";
+    const PIN_STORAGE_KEY = "wingo_pin_verified_v43";
 
     function pressNum(num) {
         if (currentInput.length < 5) {
@@ -160,8 +252,7 @@ Crypto:
         currentInput = "";
         updateDisplay();
         document.getElementById("resultArea").innerHTML = 
-            <span style="font-size: 14px; color: #fff;">ဂဏန်းများရိုက်ထည့်ပြီး "တွက်မည်" ကိုနှိပ်ပါ</span>
-        ;
+            `<span style="font-size: 14px; color: #fff;">ဂဏန်းများရိုက်ထည့်ပြီး "တွက်မည်" ကိုနှိပ်ပါ</span>`;
     }
 
     function updateDisplay() {
@@ -169,50 +260,92 @@ Crypto:
         document.getElementById("display").innerText = displayText.split('').join(' ');
     }
 
-    function calculateResult() {
+    function checkPinAndCalculate() {
         if (currentInput.length !== 5) {
             alert("ကျေးဇူးပြု၍ ဂဏန်း ၅ လုံး အပြည့်ထည့်ပါ။");
             return;
         }
 
+        let isVerified = localStorage.getItem(PIN_STORAGE_KEY) === "true";
+        if (!isVerified) {
+            document.getElementById("pinModal").style.display = "flex";
+            document.getElementById("modalPinInput").value = "";
+            document.getElementById("modalPinInput").focus();
+        } else {
+            executeCalculation();
+        }
+    }
+
+    function closePinModal() {
+        document.getElementById("pinModal").style.display = "none";
+    }
+
+    function submitPin() {
+        let userPin = document.getElementById("modalPinInput").value;
+        let resultBox = document.getElementById("resultArea");
+        if (userPin === CORRECT_PIN) {
+            localStorage.setItem(PIN_STORAGE_KEY, "true");
+            closePinModal();
+            executeCalculation();
+        } else {
+            closePinModal();
+            resultBox.innerHTML = `
+                <span style="font-size: 12px; color: #2ecc71; text-align: center;">⚠️ PIN နံပါတ် မှားယွင်းနေပါသည်</span>
+                <a href="https://t.me/skybilly20" target="_blank" class="admin-btn">Admin ကို ဆက်သွယ်ရန် (@skybilly20)</a>
+            `;
+        }
+    }
+
+    function executeCalculation() {
         let resultBox = document.getElementById("resultArea");
 
         // ၃ စက္ကန့် Loading ပြရန်
-        resultBox.innerHTML = 
+        resultBox.innerHTML = `
             <div class="spinner"></div>
-            <span style="font-size: 12px; color: #00d2ff;">⚡ Server မှ Data တွက်ချက်နေပါသည်... (3s)</span>
-        ;
+            <span style="font-size: 12px; color: #2ecc71;">⚡ တွက်ချက်နေပါသည်... (3s)</span>
+        `;
 
-        // တွက်ချက်ရန် ဂဏန်းများကို သိမ်းထားမည်
         let inputToProcess = currentInput;
 
         setTimeout(() => {
-            let sum = 0;
-            for (let i = 0; i < inputToProcess.length; i++) {
-                sum += parseInt(inputToProcess[i]);
-            }
+            let divisorValue = 83.3; // 83.3 ဖြင့် စားခြင်း
+            let numValue = parseFloat(inputToProcess);
+            let divisionResult = numValue / divisorValue; 
+            
+            let resultStr = divisionResult.toFixed(10); 
+            let targetDigit = 0;
 
-            let lastDigit = sum % 10;
-            let resultText = "";
-
-            if (lastDigit >= 0 && lastDigit <= 4) {
-                resultText = 
-                    <span style="font-size: 12px; color: #8ab4f8;">ခန့်မှန်းရန်လဒ် (ပေါင်းလဒ်: ${sum})</span><br>
-                    <strong style="font-size: 20px; color: #00d2ff;">အသေး (SMALL)</strong>
-                ;
+            // ဒသမကိန်းအမှတ် (.) ရှေ့ရှိ ကိန်းဂဏန်းများထဲမှ နောက်ဆုံးမှ ဒုတိယဂဏန်းကို တိကျစွာ ယူခြင်း
+            if (resultStr.includes('.')) {
+                let parts = resultStr.split('.');
+                let integerPart = parts[0]; 
+                if (integerPart && integerPart.length >= 2) {
+                    targetDigit = parseInt(integerPart.charAt(integerPart.length - 2), 10);
+                } else if (integerPart && integerPart.length === 1) {
+                    targetDigit = parseInt(integerPart.charAt(0), 10);
+                }
             } else {
-                resultText = 
-                    <span style="font-size: 12px; color: #8ab4f8;">ခန့်မှန်းရန်လဒ် (ပေါင်းလဒ်: ${sum})</span><br>
-                    <strong style="font-size: 20px; color: #00d2ff;">အကြီး (BIG)</strong>
-                ;
+                let cleanStr = resultStr.replace(/,/g, '');
+                if (cleanStr.length >= 2) {
+                    targetDigit = parseInt(cleanStr.charAt(cleanStr.length - 2), 10);
+                } else {
+                    targetDigit = parseInt(cleanStr.charAt(0), 10);
+                }
             }
+
+            let isBig = targetDigit >= 5;
+            let resultType = isBig ? "အကြီး (BIG)" : "အသေး (SMALL)";
+
+            let resultText = `
+                <span style="font-size: 12px; color: #82e0aa;">🎯 ရလဒ် : <strong style="font-size: 18px; color: #2ecc71;">${resultType}</strong></span><br>
+                <span style="font-size: 13px; color: #2ecc71;">🎲 ကျနိုင်မည့်ဂဏန်း: ${targetDigit} ✅</span>
+            `;
 
             resultBox.innerHTML = resultText;
 
-            // အဖြေပေါ်ပြီးတာနဲ့ ဂဏန်းများကို - - - - - သို့ ပြန်ပြောင်းပေးမည်
             currentInput = "";
             updateDisplay();
-        }, 3000); // ၃ စက္ကန့် (3000 ms) ကြာပြီးမှ ထွက်မည်
+        }, 3000); 
     }
 </script>
 
