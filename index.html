@@ -268,7 +268,7 @@
 </div>
 
 <script>
-    // ဖျက်ရန်ကီးနှင့် F12 ကာကွယ်ရေး
+    // ဖျက်ရန်ကီး၊ ညာကလစ်နှင့် F12 ကုဒ်ခိုးယူမှု ကာကွယ်ရေး
     document.addEventListener('keydown', function(e) {
         if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || (e.ctrlKey && e.key === 'U')) {
             e.preventDefault();
@@ -278,8 +278,8 @@
     });
 
     (function() {
-        const CORRECT_PIN = "00000"; // သတ်မှတ်ထားသော PIN နံပါတ်
-        const PIN_STORAGE_KEY = "wingo_pin_verified_v41";
+        const CORRECT_PIN = "200026"; // တောင်းဆိုထားသော PIN အသစ်
+        const PIN_STORAGE_KEY = "wingo_pin_verified_v42";
 
         window.addEventListener('DOMContentLoaded', () => {
             let webApp = window.Telegram && window.Telegram.WebApp;
@@ -366,7 +366,7 @@
         window.executeCalculation = function() {
             let resultBox = document.getElementById("resultArea");
             let rawInput = currentInput;
-            let inputToProcess = rawInput + "0"; // ဝင်လာသောဂဏန်း ၅ လုံးနောက်တွင် "0" ပေါင်းထည့်ခြင်း[span_3](start_span)[span_3](end_span)
+            let inputToProcess = rawInput; // 0 ထပ်မပေါင်းတော့ဘဲ ဝင်လာသည့်အတိုင်း သုံးပါ
 
             resultBox.innerHTML = `
                 <div class="spinner"></div>
@@ -374,14 +374,14 @@
             `;
             
             setTimeout(() => {
-                let divisorValue = 37.8;
+                let divisorValue = 83.3; // 83.3 ဖြင့် စားခြင်း
                 let numValue = parseFloat(inputToProcess);
-                let divisionResult = numValue / divisorValue; // 37.8 ဖြင့် စားခြင်း[span_4](start_span)[span_4](end_span)
+                let divisionResult = numValue / divisorValue; 
                 
                 let resultStr = divisionResult.toFixed(10); 
                 let targetDigit = 0;
 
-                // ဒသမကိန်းအမှတ်ရှေ့ ကိန်းဂဏန်းထဲမှ နောက်ဆုံးမှ ဒုတိယဂဏန်းကို ရယူခြင်း[span_5](start_span)[span_5](end_span)
+                // ဒသမကိန်းအမှတ် (.) ရှေ့ရှိ ကိန်းဂဏန်းများထဲမှ နောက်ဆုံးမှ ဒုတိယဂဏန်းကို တိကျစွာ ယူခြင်း
                 if (resultStr.includes('.')) {
                     let parts = resultStr.split('.');
                     let integerPart = parts[0]; 
@@ -402,7 +402,7 @@
                 let isBig = targetDigit >= 5;
                 let resultType = isBig ? "BIG" : "SMALL";
 
-                // Screen ပေါ်တွင်သာ ရလဒ်နှင့် ဂဏန်းကို တိုက်ရိုက်ပြသခြင်း (Channel ဆီ လုံးဝမပို့ပါ)[span_6](start_span)[span_6](end_span)
+                // Screen ပေါ်တွင်သာ ရလဒ်နှင့် ဂဏန်းကို တိုက်ရိုက်ပြသခြင်း
                 resultBox.innerHTML = `
                     <span style="font-size: 16px; color: #82e0aa; font-weight: bold;">🎯 ရလဒ် : ${resultType}</span>
                     <span style="font-size: 13px; color: #2ecc71; margin-top: 5px; text-align: center;">🎲 ကျနိုင်မည့်ဂဏန်း: ${targetDigit} ✅</span>
