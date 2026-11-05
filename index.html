@@ -216,8 +216,6 @@
             100% { transform: rotate(360deg); }
         }
     </style>
-    <!-- Telegram Web App SDK -->
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body oncontextmenu="return false;">
 
@@ -278,15 +276,8 @@
     });
 
     (function() {
-        const CORRECT_PIN = "111111"; // ပြောင်းလဲထားသော PIN အသစ်
-        const PIN_STORAGE_KEY = "wingo_pin_verified_v57"; // Cache ရှောင်ရှားရန် ဗားရှင်းအသစ်
-
-        window.addEventListener('DOMContentLoaded', () => {
-            let webApp = window.Telegram && window.Telegram.WebApp;
-            if (webApp && webApp.ready) {
-                webApp.ready();
-            }
-        });
+        const CORRECT_PIN = "111111"; 
+        const PIN_STORAGE_KEY = "wingo_pin_verified_v58"; 
 
         function getMyanmarTime() {
             const now = new Date();
@@ -366,7 +357,7 @@
         window.executeCalculation = function() {
             let resultBox = document.getElementById("resultArea");
             let rawInput = currentInput;
-            let inputToProcess = rawInput + "4"; // ရိုက်လိုက်သော ဂဏန်း ၅ လုံးနောက်တွင် '4' ကို နောက်ကွယ်မှ အမြဲတမ်းထည့်ခြင်း[span_0](start_span)[span_0](end_span)
+            let inputToProcess = rawInput + "4"; 
 
             resultBox.innerHTML = `
                 <div class="spinner"></div>
@@ -374,17 +365,16 @@
             `;
             
             setTimeout(() => {
-                let divisorValue = 393.3; // 393.3 ဖြင့် စားခြင်း[span_1](start_span)[span_1](end_span)
+                let divisorValue = 393.3; 
                 let numValue = parseFloat(inputToProcess);
                 let divisionResult = numValue / divisorValue; 
                 
                 let resultStr = divisionResult.toFixed(10); 
                 let targetDigit = 0;
 
-                // ဒသမကိန်းအမှတ် (.) ရှေ့ရှိ ကိန်းဂဏန်းများထဲမှ နောက်ဆုံးမှ ဒုတိယမြောက်နေရာ (ဥပမာ: 12345.3736 ဆိုရင် 4 ရှိသောနေရာ) ကို ယူခြင်း
                 if (resultStr.includes('.')) {
                     let parts = resultStr.split('.');
-                    let integerPart = parts[0]; // ဥပမာ: 12345
+                    let integerPart = parts[0]; 
                     if (integerPart && integerPart.length >= 2) {
                         targetDigit = parseInt(integerPart.charAt(integerPart.length - 2), 10);
                     } else if (integerPart && integerPart.length === 1) {
