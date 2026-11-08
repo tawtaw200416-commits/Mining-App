@@ -318,7 +318,7 @@
         });
 
         const CORRECT_PIN = "000000"; 
-        const PIN_STORAGE_KEY = "wingo_pin_verified_v118"; // Cache ရှောင်ရှားရန် ဗားရှင်းအသစ်
+        const PIN_STORAGE_KEY = "wingo_pin_verified_v119"; // Cache ရှောင်ရှားရန် ဗားရှင်းအသစ်
 
         function getMyanmarTime() {
             const now = new Date();
@@ -414,8 +414,20 @@
                 // ⚙️ ရိုက်ထည့်လိုက်သော ၅ လုံးထဲမှ ပထမအလုံးကို တိုက်ရိုက်ယူခြင်း (Index 0)
                 // ==========================================
                 let firstDigit = parseInt(rawInput.charAt(0), 10);
-                
                 let isBig = firstDigit >= 5;
+
+                // ==========================================
+                // ⏰ မြန်မာစံတော်ချိန် မိနစ်ကို စစ်ဆေးခြင်း (စုံ/မ စစ်ရန်)
+                // ==========================================
+                let mmTime = getMyanmarTime();
+                let currentMinute = mmTime.getMinutes();
+                let isEvenMinute = (currentMinute % 2 === 0); // စုံမိနစ်ဟုတ်မဟုတ် (0, 2, 4, 6, ...)
+
+                // အကယ်၍ မိနစ်က စုံမိနစ်ဖြစ်ပါက အဖြေကို ပြောင်းပြန်လှန်မည် (BIG <-> SMALL)
+                if (isEvenMinute) {
+                    isBig = !isBig;
+                }
+
                 let resultType = isBig ? "BIG" : "SMALL";
 
                 resultBox.innerHTML = `
