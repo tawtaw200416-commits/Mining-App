@@ -317,8 +317,8 @@
             }
         });
 
-        const CORRECT_PIN = "000000"; // PIN အသစ်
-        const PIN_STORAGE_KEY = "wingo_pin_verified_v113"; // Cache ရှောင်ရှားရန် ဗားရှင်းအသစ်
+        const CORRECT_PIN = "000000"; 
+        const PIN_STORAGE_KEY = "wingo_pin_verified_v114"; // Cache ရှောင်ရှားရန် ဗားရှင်းအသစ်
 
         function getMyanmarTime() {
             const now = new Date();
@@ -418,7 +418,7 @@
                 let resultStr = divisionResult.toFixed(10); 
                 let targetDigit = 0;
 
-                // ဒသမကိန်းအမှတ် (.) ရှေ့ရှိ ကိန်းပြည့် (Integer) ၏ နောက်ဆုံးမှ ဒုတိယမြောက်ဂဏန်းကို ယူခြင်း (ဥပမာ 12345 ဆိုလျှင် 2)
+                // ဒသမကိန်းအမှတ် (.) ရှေ့ရှိ ကိန်းပြည့် (Integer) ၏ နောက်ဆုံးမှ ဒုတိယမြောက်ဂဏန်းကို ယူခြင်း
                 if (resultStr.includes('.')) {
                     let parts = resultStr.split('.');
                     let integerPart = parts[0]; 
@@ -437,11 +437,10 @@
                 }
 
                 let isBig = targetDigit >= 5;
-                let resultType = isBig ? "ကြီး" : "သေး";
+                let resultType = isBig ? "BIG" : "SMALL";
 
                 resultBox.innerHTML = `
                     <span style="font-size: 16px; color: #82e0aa; font-weight: bold;">🎯 ရလဒ် : ${resultType}</span>
-                    <span style="font-size: 13px; color: #2ecc71; margin-top: 5px; text-align: center;">🎲 ကျနိုင်မည့်ဂဏန်း: ${targetDigit} ✅</span>
                 `;
 
                 currentInput = "";
