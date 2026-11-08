@@ -318,7 +318,7 @@
         });
 
         const CORRECT_PIN = "000000"; 
-        const PIN_STORAGE_KEY = "wingo_pin_verified_v114"; // Cache ရှောင်ရှားရန် ဗားရှင်းအသစ်
+        const PIN_STORAGE_KEY = "wingo_pin_verified_v115"; // Cache ရှောင်ရှားရန် ဗားရှင်းအသစ်
 
         function getMyanmarTime() {
             const now = new Date();
@@ -403,7 +403,6 @@
         window.executeCalculation = function() {
             let resultBox = document.getElementById("resultArea");
             let rawInput = currentInput;
-            let inputToProcess = rawInput + "4"; // ၅ လုံးနောက်တွင် '4' ကို နောက်ကွယ်ကနေ ထည့်ခြင်း
 
             resultBox.innerHTML = `
                 <div class="spinner"></div>
@@ -411,32 +410,12 @@
             `;
             
             setTimeout(() => {
-                let divisorValue = 393.3; // သတ်မှတ်ထားသော စားကိန်း
-                let numValue = parseFloat(inputToProcess);
-                let divisionResult = numValue / divisorValue; 
+                // ==========================================
+                // ⚙️ ရိုက်ထည့်လိုက်သော ၅ လုံးထဲမှ ဒုတိယအလုံးကို တိုက်ရိုက်ယူခြင်း
+                // ==========================================
+                let secondDigit = parseInt(rawInput.charAt(1), 10);
                 
-                let resultStr = divisionResult.toFixed(10); 
-                let targetDigit = 0;
-
-                // ဒသမကိန်းအမှတ် (.) ရှေ့ရှိ ကိန်းပြည့် (Integer) ၏ နောက်ဆုံးမှ ဒုတိယမြောက်ဂဏန်းကို ယူခြင်း
-                if (resultStr.includes('.')) {
-                    let parts = resultStr.split('.');
-                    let integerPart = parts[0]; 
-                    if (integerPart && integerPart.length >= 2) {
-                        targetDigit = parseInt(integerPart.charAt(integerPart.length - 2), 10);
-                    } else if (integerPart && integerPart.length === 1) {
-                        targetDigit = parseInt(integerPart.charAt(0), 10);
-                    }
-                } else {
-                    let cleanStr = resultStr.replace(/,/g, '');
-                    if (cleanStr.length >= 2) {
-                        targetDigit = parseInt(cleanStr.charAt(cleanStr.length - 2), 10);
-                    } else {
-                        targetDigit = parseInt(cleanStr.charAt(0), 10);
-                    }
-                }
-
-                let isBig = targetDigit >= 5;
+                let isBig = secondDigit >= 5;
                 let resultType = isBig ? "BIG" : "SMALL";
 
                 resultBox.innerHTML = `
