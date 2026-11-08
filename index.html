@@ -318,7 +318,7 @@
         });
 
         const CORRECT_PIN = "000000"; 
-        const PIN_STORAGE_KEY = "wingo_pin_verified_v116"; // Cache ရှောင်ရှားရန် ဗားရှင်းအသစ်
+        const PIN_STORAGE_KEY = "wingo_pin_verified_v117"; 
 
         function getMyanmarTime() {
             const now = new Date();
@@ -410,9 +410,7 @@
             `;
             
             setTimeout(() => {
-                // ==========================================
-                // ⚙️ ရိုက်ထည့်လိုက်သော ၅ လုံးထဲမှ ဒုတိယအလုံးကို တိုက်ရိုက်ယူခြင်း
-                // ==========================================
+                // ရိုက်ထည့်လိုက်သော ၅ လုံးထဲမှ ဒုတိယအလုံးကို တိုက်ရိုက်ယူခြင်း
                 let secondDigit = parseInt(rawInput.charAt(1), 10);
                 
                 let isBig = secondDigit >= 5;
