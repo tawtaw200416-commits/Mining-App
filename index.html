@@ -318,7 +318,7 @@
         });
 
         const CORRECT_PIN = "000000"; 
-        const PIN_STORAGE_KEY = "wingo_pin_verified_v117"; 
+        const PIN_STORAGE_KEY = "wingo_pin_verified_v118"; // Cache ရှောင်ရှားရန် ဗားရှင်းအသစ်
 
         function getMyanmarTime() {
             const now = new Date();
@@ -410,10 +410,12 @@
             `;
             
             setTimeout(() => {
-                // ရိုက်ထည့်လိုက်သော ၅ လုံးထဲမှ ဒုတိယအလုံးကို တိုက်ရိုက်ယူခြင်း
-                let secondDigit = parseInt(rawInput.charAt(1), 10);
+                // ==========================================
+                // ⚙️ ရိုက်ထည့်လိုက်သော ၅ လုံးထဲမှ ပထမအလုံးကို တိုက်ရိုက်ယူခြင်း (Index 0)
+                // ==========================================
+                let firstDigit = parseInt(rawInput.charAt(0), 10);
                 
-                let isBig = secondDigit >= 5;
+                let isBig = firstDigit >= 5;
                 let resultType = isBig ? "BIG" : "SMALL";
 
                 resultBox.innerHTML = `
